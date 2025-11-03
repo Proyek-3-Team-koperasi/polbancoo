@@ -50,6 +50,7 @@ Route::prefix('member')
         Route::get('/finances/add/{type}', [FinancesController::class, 'create'])->name('finances.create');
         Route::post('/finances/store', [FinancesController::class, 'store'])->name('finances.store');
     Route::get('/status', StatusController::class)->name('status');
+    Route::get('/status/{id}', [StatusController::class, 'show'])->name('status.show');
     Route::get('/products', [\App\Http\Controllers\Member\ProductsController::class, 'index'])->name('products');
         Route::get('/products/{product:slug}', [\App\Http\Controllers\Member\ProductsController::class, 'show'])->name('products.show');
     Route::get('/profile', \App\Http\Controllers\Member\ProfileController::class)->name('profile');

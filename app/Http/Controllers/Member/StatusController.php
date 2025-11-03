@@ -12,6 +12,7 @@ use Carbon\Carbon;
 
 class StatusController extends Controller
 {
+    // Halaman utama daftar status transaksi
     public function __invoke(Request $request): Response
     {
         $query = FinancingApplication::where('member_user_id', Auth::id())
@@ -29,13 +30,13 @@ class StatusController extends Controller
         // Filter Berdasarkan Status
         if ($request->status_filter) {
             if ($request->status_filter === 'Tunai') {
-                // hanya tampilkan pengajuan tunai yang sudah lunas
+                // cuman tampilin pengajuan tunai yang udah lunas
                 $query->where('status', 'Lunas')
                     ->where(function ($q) {
                         $q->whereNull('tenor')->orWhere('tenor', 0);
                     });
             } elseif ($request->status_filter === 'Cicilan') {
-                // tampilkan semua pengajuan cicilan (ada tenor)
+                // tampilin semua pengajuan cicilan (ada tenor)
                 $query->whereNotNull('tenor')
                     ->whereIn('status', ['Approved', 'Pending', 'Rejected', 'Active', 'Lunas']);
             } else {
@@ -50,7 +51,27 @@ class StatusController extends Controller
             $query->orderBy('selling_price_total', 'asc');
         }
 
-        $applications = $query->get(['id', 'order_id', 'tenor', 'status', 'selling_price_total', 'created_at']);
+        $applications = $query->get([
+            'id',
+            'order_id',
+            'tenor',
+            'status',
+            'selling_price_total',
+            'created_at',
+            'approval_date'
+        ]);
+
+        // Auto update status approved jadi active setelah 3 hari
+        foreach ($applications as $app) {
+            if (
+                $app->status === 'Approved' &&
+                $app->approval_date &&
+                Carbon::parse($app->approval_date)->addDays(3)->isPast()
+            ) {
+                $app->status = 'Active';
+                $app->save();
+            }
+        }
 
         return Inertia::render('Member/Status', [
             'applications' => $applications,
@@ -59,6 +80,18 @@ class StatusController extends Controller
                 'status_filter' => $request->status_filter,
                 'sort_price' => $request->sort_price,
             ],
+        ]);
+    }
+
+    // 🔶 Halaman detail transaksi
+    public function show($id): Response
+    {
+        $transaction = FinancingApplication::with('order')
+            ->where('member_user_id', Auth::id()) // biar anggota cuma bisa lihat punya sendiri aja
+            ->findOrFail($id);
+
+        return Inertia::render('Member/TransactionDetail', [
+            'transaction' => $transaction,
         ]);
     }
 }
