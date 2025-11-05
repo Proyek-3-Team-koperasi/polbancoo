@@ -110,12 +110,18 @@ class FinancesController extends Controller
             'type' => 'required|in:Mandatory,Voluntary',
             'amount' => 'required|numeric|min:1000',
             'description' => 'nullable|string|max:255',
+            'bukti_transfer' => 'required|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
         $user = Auth::user();
 
         // Ambil Akun Simpanan Milik User //
         $savingsAccount = SavingsAccount::where('member_user_id', $user->id)->firstOrFail();
+
+        $proofPath = null;
+        if ($request->hasFile('bukti_transfer')) {
+            $proofPath = $request->file('bukti_transfer')->store('img/bukti_transfer', 'public');
+        }
 
         // Simpan transaksi ke tabel savings_transactions //
         SavingsTransaction::create([
@@ -124,6 +130,7 @@ class FinancesController extends Controller
             'type' => $request->type,
             'description' => $request->description?: '',
             'transaction_date' => now(),
+            'bukti_transfer' => $proofPath
         ]);
 
         return redirect()->back()->with('success', 'Transaksi berhasil dikirim dan menunggu persetujuan admin.');

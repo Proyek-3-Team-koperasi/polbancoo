@@ -12,9 +12,17 @@
 
   const nominal = ref(fixedNominal || "");
   const catatan = ref("");
+  const buktiTransfer = ref(null);
   const isWajib = computed(() => type === "wajib");
 
   const presetNominal = [10000, 50000, 100000, 200000, 300000, 500000];
+
+  function handleFileChange(event) {
+    const file = event.target.files[0];
+    if (file) {
+      buktiTransfer.value = file;
+    }
+  }
 
   function simpanData() {
         if (!nominal.value) {
@@ -28,10 +36,20 @@
             return;
         }
 
+        if (!buktiTransfer.value) {
+          showToast({
+            message: "Upload bukti transfer!",
+            icon: "fail",
+            duration: 2500,
+          });
+          return;
+        }
+
         const formData = new FormData();
         formData.append("type", mappedType);
         formData.append("amount", nominal.value);
         formData.append("description", catatan.value);
+        formData.append("bukti_transfer", buktiTransfer.value);
 
         router.post("/member/finances/store", formData, {
             onSuccess: () => {
@@ -46,7 +64,7 @@
 </script>
 
 <template>
-  <Head title="P" />
+  <Head title="Tambah Simpanan" />
 
   <AuthenticatedLayout>
     <div class="tw-min-h-screen tw-bg-gray-50 tw-p-4">
@@ -84,6 +102,18 @@
           >
             Rp {{ amount.toLocaleString('id-ID') }}
           </van-button>
+        </div>
+
+        <div class="tw-mb-4">
+          <div class="tw-text-gray-700 tw-font-medium tw-mb-1">
+            Bukti Transfer
+          </div>
+          <input
+            type="file"
+            @change="handleFileChange"
+            accept="image/*"
+            class="tw-border tw-p-2 tw-rounded tw-w-full"
+          />
         </div>
 
         <div>

@@ -30,6 +30,7 @@ return new class extends Migration
             $table->decimal('amount', 15, 2);
             $table->string('type', 50);
             $table->text('description')->nullable();
+            $table->string('bukti_transfer')->nullable(false);
             $table->date('transaction_date');
             $table->timestamps();
         });

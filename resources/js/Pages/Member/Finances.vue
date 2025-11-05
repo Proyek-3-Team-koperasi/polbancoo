@@ -35,7 +35,7 @@
         })) || [];
 
         // Spread Operator //
-        return [...pending, ...diterima, ...ditolak].sort((b, a) =>
+        return [...pending, ...diterima, ...ditolak].sort((a, b) =>
             new Date(b.tanggal) - new Date(a.tanggal)
         );
     });

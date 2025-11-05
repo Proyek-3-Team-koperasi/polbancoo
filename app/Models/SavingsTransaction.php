@@ -16,6 +16,7 @@ class SavingsTransaction extends Model
         'type',
         'description',
         'transaction_date',
+        'bukti_transfer'
     ];
 
     protected $casts = [
