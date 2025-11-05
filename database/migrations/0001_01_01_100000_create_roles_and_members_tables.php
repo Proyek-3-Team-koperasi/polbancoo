@@ -27,7 +27,7 @@ return new class extends Migration
         Schema::create('members', function (Blueprint $table) {
             $table->foreignId('user_id')->primary()->constrained()->cascadeOnDelete();
             $table->string('member_id_number', 50)->unique();
-            $table->string('faculty_or_unit', 100)->nullable();
+            $table->integer('point');
             $table->string('status', 50)->default('Pending');
             $table->timestamps();
         });
@@ -43,4 +43,3 @@ return new class extends Migration
         Schema::dropIfExists('roles');
     }
 };
-

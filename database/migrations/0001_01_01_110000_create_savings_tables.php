@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('savings_accounts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('member_user_id')->unique()->constrained('members', 'user_id')->cascadeOnDelete();
-            $table->decimal('principal_saving', 15, 2)->default(0);
-            $table->decimal('mandatory_saving', 15, 2)->default(0);
-            $table->decimal('voluntary_saving', 15, 2)->default(0);
+            $table->unsignedBigInteger('principal_saving')->default(0);
+            $table->unsignedBigInteger('mandatory_saving')->default(0);
+            $table->unsignedBigInteger('voluntary_saving')->default(0);
             $table->timestamps();
         });
 
@@ -27,7 +27,7 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('users')
                 ->nullOnDelete();
-            $table->decimal('amount', 15, 2);
+            $table->bigInteger('amount');
             $table->string('type', 50);
             $table->text('description')->nullable();
             $table->string('bukti_transfer')->nullable(false);

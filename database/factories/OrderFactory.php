@@ -19,9 +19,8 @@ class OrderFactory extends Factory
             'member_user_id' => Member::factory(),
             'order_date' => fake()->dateTimeBetween('-1 year', 'now'),
             'status' => fake()->randomElement(['Pending Payment', 'Processing', 'Shipped', 'Completed', 'Cancelled']),
-            'total_amount' => fake()->randomFloat(2, 100000, 5000000),
+            'total_amount' => fake()->numberBetween(100000, 5000000),
             'payment_method' => fake()->randomElement(['Cash', 'Murabahah']),
         ];
     }
 }
-

@@ -19,11 +19,10 @@ class SavingsTransactionFactory extends Factory
         return [
             'savings_account_id' => SavingsAccount::factory(),
             'admin_user_id' => User::factory(),
-            'amount' => fake()->randomFloat(2, 10000, 5000000),
+            'amount' => fake()->numberBetween(10000, 5000000),
             'type' => fake()->randomElement(['Principal', 'Mandatory', 'Voluntary', 'Withdrawal']),
             'description' => fake()->sentence(),
             'transaction_date' => fake()->dateTimeBetween('-1 year', 'now')->format('Y-m-d'),
         ];
     }
 }
-

@@ -16,11 +16,13 @@ class SavingsTransaction extends Model
         'type',
         'description',
         'transaction_date',
-        'bukti_transfer'
+        'bukti_transfer',
+        'ledger_journal_id',
     ];
 
     protected $casts = [
         'transaction_date' => 'date',
+        'amount' => 'integer',
     ];
 
     public function account()
@@ -32,5 +34,9 @@ class SavingsTransaction extends Model
     {
         return $this->belongsTo(User::class, 'admin_user_id');
     }
-}
 
+    public function journal()
+    {
+        return $this->belongsTo(LedgerJournal::class, 'ledger_journal_id');
+    }
+}

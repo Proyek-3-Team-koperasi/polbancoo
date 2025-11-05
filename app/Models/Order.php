@@ -15,11 +15,12 @@ class Order extends Model
         'status',
         'total_amount',
         'payment_method',
+        'ledger_journal_id',
     ];
 
     protected $casts = [
         'order_date' => 'datetime',
-        'total_amount' => 'decimal:2',
+        'total_amount' => 'integer',
     ];
 
     public function member()
@@ -36,5 +37,9 @@ class Order extends Model
     {
         return $this->hasOne(FinancingApplication::class);
     }
-}
 
+    public function journal()
+    {
+        return $this->belongsTo(LedgerJournal::class, 'ledger_journal_id');
+    }
+}

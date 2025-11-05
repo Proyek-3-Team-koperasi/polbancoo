@@ -18,8 +18,12 @@ class Member extends Model
     protected $fillable = [
         'user_id',
         'member_id_number',
-        'faculty_or_unit',
+        'point',
         'status',
+    ];
+
+    protected $casts = [
+        'point' => 'integer',
     ];
 
     public function user()
@@ -42,4 +46,3 @@ class Member extends Model
         return $this->hasMany(FinancingApplication::class, 'member_user_id');
     }
 }
-

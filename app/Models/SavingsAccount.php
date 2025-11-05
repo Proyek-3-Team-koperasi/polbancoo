@@ -16,6 +16,12 @@ class SavingsAccount extends Model
         'voluntary_saving',
     ];
 
+    protected $casts = [
+        'principal_saving' => 'integer',
+        'mandatory_saving' => 'integer',
+        'voluntary_saving' => 'integer',
+    ];
+
     public function member()
     {
         return $this->belongsTo(Member::class, 'member_user_id');
@@ -26,4 +32,3 @@ class SavingsAccount extends Model
         return $this->hasMany(SavingsTransaction::class);
     }
 }
-

@@ -17,10 +17,10 @@ return new class extends Migration
             $table->foreignId('member_user_id')->constrained('members', 'user_id')->cascadeOnDelete();
             $table->foreignId('admin_user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->unsignedInteger('tenor');
-            $table->decimal('cost_price_total', 15, 2);
-            $table->decimal('margin', 15, 2);
-            $table->decimal('selling_price_total', 15, 2);
-            $table->decimal('monthly_installment', 15, 2);
+            $table->unsignedBigInteger('cost_price_total');
+            $table->bigInteger('margin');
+            $table->unsignedBigInteger('selling_price_total');
+            $table->unsignedBigInteger('monthly_installment');
             $table->string('status', 50)->default('Pending');
             $table->timestamp('application_date')->useCurrent();
             $table->timestamp('approval_date')->nullable();
@@ -33,7 +33,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('financing_application_id')->constrained()->cascadeOnDelete();
             $table->unsignedInteger('bill_number');
-            $table->decimal('amount', 15, 2);
+            $table->unsignedBigInteger('amount');
             $table->date('due_date');
             $table->date('payment_date')->nullable();
             $table->string('status', 50)->default('Unpaid');
@@ -52,4 +52,3 @@ return new class extends Migration
         Schema::dropIfExists('financing_applications');
     }
 };
-

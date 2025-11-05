@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
         /** @var Generator $faker */
         $faker = App::make(Generator::class);
 
+        $this->call(LedgerSeeder::class);
+
         $roles = collect(['Anggota', 'Admin', 'Super Admin'])
             ->mapWithKeys(function (string $role) {
                 $model = Role::query()->firstOrCreate(['name' => $role]);
@@ -57,6 +59,7 @@ class DatabaseSeeder extends Seeder
             ->for($memberUser, 'user')
             ->state([
                 'member_id_number' => 'MEM0001',
+                'point' => 0,
                 'status' => 'Active',
             ])
             ->create();
@@ -109,11 +112,12 @@ class DatabaseSeeder extends Seeder
                 $productToBuys = $productToBuys->unique("id");
 
                 for ($i = 0; $i < $productToBuys->count(); $i++) {
-                    $product = $products->get($i);
+                    /** @var Product $product */
+                    $product = $productToBuys->values()->get($i);
 
                     $quantity = $faker->numberBetween(1, 3);
                     $price = $order->payment_method === 'Murabahah'
-                        ? round($product->cash_price * 1.1, 2)
+                        ? intdiv($product->cash_price * 110, 100)
                         : $product->cash_price;
                     $orderItems->push(
                         OrderItem::factory()
@@ -128,17 +132,17 @@ class DatabaseSeeder extends Seeder
                 }
 
                 $totalAmount = $orderItems->reduce(
-                    fn (float $carry, OrderItem $item) => $carry + ($item->price * $item->quantity),
+                    fn (int $carry, OrderItem $item) => $carry + ($item->price * $item->quantity),
                     0
                 );
 
-                $order->update(['total_amount' => round($totalAmount, 2)]);
+                $order->update(['total_amount' => $totalAmount]);
 
                 if ($order->payment_method !== 'Murabahah') {
                     continue;
                 }
 
-                $costTotal = $orderItems->reduce(function (float $carry, OrderItem $item) use ($products) {
+                $costTotal = $orderItems->reduce(function (int $carry, OrderItem $item) use ($products) {
                     /** @var Product $product */
                     $product = $products->firstWhere('id', $item->product_id);
 
@@ -147,7 +151,7 @@ class DatabaseSeeder extends Seeder
 
                 $margin = max($totalAmount - $costTotal, 0);
                 $tenor = $faker->randomElement([3, 6, 9, 12]);
-                $monthlyInstallment = $tenor > 0 ? round($totalAmount / $tenor, 2) : 0;
+                $monthlyInstallment = $tenor > 0 ? intdiv($totalAmount + $tenor - 1, $tenor) : 0;
 
                 $application = FinancingApplication::factory()
                     ->state([
@@ -155,9 +159,9 @@ class DatabaseSeeder extends Seeder
                         'member_user_id' => $member->getKey(),
                         'admin_user_id' => $adminUser->id,
                         'tenor' => $tenor,
-                        'cost_price_total' => round($costTotal, 2),
-                        'margin' => round($margin, 2),
-                        'selling_price_total' => round($totalAmount, 2),
+                        'cost_price_total' => $costTotal,
+                        'margin' => $margin,
+                        'selling_price_total' => $totalAmount,
                         'monthly_installment' => $monthlyInstallment,
                         'status' => 'Active',
                         'application_date' => $faker->dateTimeBetween($order->order_date, 'now'),

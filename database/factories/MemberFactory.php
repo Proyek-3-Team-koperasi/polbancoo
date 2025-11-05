@@ -19,9 +19,8 @@ class MemberFactory extends Factory
         return [
             'user_id' => User::factory(),
             'member_id_number' => strtoupper(Str::random(3)) . fake()->unique()->numerify('####'),
-            'faculty_or_unit' => fake()->optional()->sentence(2),
+            'point' => fake()->numberBetween(0, 1000),
             'status' => fake()->randomElement(['Pending', 'Active', 'Inactive']),
         ];
     }
 }
-

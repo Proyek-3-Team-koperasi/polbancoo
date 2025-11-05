@@ -29,10 +29,10 @@ class FinancingApplication extends Model
         'application_date' => 'datetime',
         'approval_date' => 'datetime',
         'agreement_signed_at' => 'datetime',
-        'cost_price_total' => 'decimal:2',
-        'margin' => 'decimal:2',
-        'selling_price_total' => 'decimal:2',
-        'monthly_installment' => 'decimal:2',
+        'cost_price_total' => 'integer',
+        'margin' => 'integer',
+        'selling_price_total' => 'integer',
+        'monthly_installment' => 'integer',
     ];
 
     public function order()
@@ -55,4 +55,3 @@ class FinancingApplication extends Model
         return $this->hasMany(InstallmentBill::class);
     }
 }
-

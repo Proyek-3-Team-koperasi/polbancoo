@@ -21,8 +21,8 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'cost_price' => 'decimal:2',
-        'cash_price' => 'decimal:2',
+        'cost_price' => 'integer',
+        'cash_price' => 'integer',
     ];
 
     public function category()
@@ -35,4 +35,3 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 }
-

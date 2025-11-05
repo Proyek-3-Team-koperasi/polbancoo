@@ -17,7 +17,7 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         $name = fake()->unique()->words(3, true);
-        $costPrice = fake()->randomFloat(2, 100000, 2000000);
+        $costPrice = fake()->numberBetween(100000, 2000000);
 
         return [
             'category_id' => ProductCategory::factory(),
@@ -26,7 +26,7 @@ class ProductFactory extends Factory
             'description' => fake()->paragraph(),
             'image_url' => fake()->optional()->imageUrl(),
             'cost_price' => $costPrice,
-            'cash_price' => $costPrice + fake()->randomFloat(2, 50000, 500000),
+            'cash_price' => $costPrice + fake()->numberBetween(50000, 500000),
             'stock' => fake()->numberBetween(0, 100),
         ];
     }

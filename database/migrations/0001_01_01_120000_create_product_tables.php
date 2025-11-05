@@ -25,8 +25,8 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->string('image_url', 255)->nullable();
-            $table->decimal('cost_price', 15, 2);
-            $table->decimal('cash_price', 15, 2);
+            $table->unsignedBigInteger('cost_price');
+            $table->unsignedBigInteger('cash_price');
             $table->unsignedInteger('stock')->default(0);
             $table->timestamps();
         });
@@ -41,4 +41,3 @@ return new class extends Migration
         Schema::dropIfExists('product_categories');
     }
 };
-

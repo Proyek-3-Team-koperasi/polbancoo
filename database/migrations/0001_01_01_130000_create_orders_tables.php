@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('member_user_id')->constrained('members', 'user_id')->cascadeOnDelete();
             $table->timestamp('order_date')->useCurrent();
             $table->string('status', 50);
-            $table->decimal('total_amount', 15, 2);
+            $table->unsignedBigInteger('total_amount');
             $table->string('payment_method', 50);
             $table->timestamps();
         });
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->unsignedInteger('quantity');
-            $table->decimal('price', 15, 2);
+            $table->unsignedBigInteger('price');
             $table->timestamps();
 
             $table->unique(['order_id', 'product_id']);
@@ -42,4 +42,3 @@ return new class extends Migration
         Schema::dropIfExists('orders');
     }
 };
-

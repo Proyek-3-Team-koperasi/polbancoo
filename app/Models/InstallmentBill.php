@@ -16,17 +16,22 @@ class InstallmentBill extends Model
         'due_date',
         'payment_date',
         'status',
+        'ledger_journal_id',
     ];
 
     protected $casts = [
         'due_date' => 'date',
         'payment_date' => 'date',
-        'amount' => 'decimal:2',
+        'amount' => 'integer',
     ];
 
     public function financingApplication()
     {
         return $this->belongsTo(FinancingApplication::class);
     }
-}
 
+    public function journal()
+    {
+        return $this->belongsTo(LedgerJournal::class, 'ledger_journal_id');
+    }
+}

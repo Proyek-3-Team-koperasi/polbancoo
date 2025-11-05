@@ -19,9 +19,10 @@ class FinancingApplicationFactory extends Factory
     {
         $memberFactory = Member::factory();
         $tenor = fake()->randomElement([3, 6, 9, 12]);
-        $costPrice = fake()->randomFloat(2, 500000, 10000000);
-        $margin = fake()->randomFloat(2, 50000, 1000000);
+        $costPrice = fake()->numberBetween(500000, 10000000);
+        $margin = fake()->numberBetween(50000, 1000000);
         $sellingPrice = $costPrice + $margin;
+        $monthlyInstallment = intdiv($sellingPrice + $tenor - 1, $tenor);
 
         return [
             'order_id' => Order::factory()
@@ -37,7 +38,7 @@ class FinancingApplicationFactory extends Factory
             'cost_price_total' => $costPrice,
             'margin' => $margin,
             'selling_price_total' => $sellingPrice,
-            'monthly_installment' => round($sellingPrice / $tenor, 2),
+            'monthly_installment' => $monthlyInstallment,
             'status' => fake()->randomElement(['Pending', 'Approved', 'Rejected', 'Active', 'Fully Paid']),
             'application_date' => fake()->dateTimeBetween('-1 year', 'now'),
             'approval_date' => fake()->optional()->dateTimeBetween('-11 months', 'now'),

@@ -17,7 +17,7 @@ class OrderItem extends Model
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
+        'price' => 'integer',
     ];
 
     public function order()
@@ -30,4 +30,3 @@ class OrderItem extends Model
         return $this->belongsTo(Product::class);
     }
 }
-
