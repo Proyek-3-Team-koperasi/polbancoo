@@ -139,11 +139,11 @@ const currentSidebarLinks = computed(() =>
         ...link,
         href: route(link.name),
         active: isActive(link.patterns ?? [link.name]),
-    }))
+    })),
 );
 
 const sidebarTitle = computed(() =>
-    isSuperAdmin.value ? "KopSy Super Admin" : "KopSy Admin"
+    isSuperAdmin.value ? "KopSy Super Admin" : "KopSy Admin",
 );
 
 const curTitle = computed(() => {
@@ -161,7 +161,7 @@ const currentMemberLinks = computed(() =>
             (typeof link.icon === "string" && link.icon.endsWith("-o")
                 ? link.icon.slice(0, -2)
                 : link.icon),
-    }))
+    })),
 );
 
 const memberActiveIndex = computed(() => {
@@ -182,7 +182,7 @@ watch(
     () => page.url,
     () => {
         sidebarOpen.value = false;
-    }
+    },
 );
 </script>
 

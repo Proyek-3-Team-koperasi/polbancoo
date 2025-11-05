@@ -3,7 +3,20 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import MemberQuickActions from "@/Components/member/MemberQuickActions.vue";
 import ProductRecommendationCard from "@/Components/member/ProductRecommendationCard.vue";
 import { Head, router, usePage } from "@inertiajs/vue3";
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import AccountSummary from "./partials/account/AccountSummary.vue";
+import AccountTransactions from "./partials/account/AccountTransactions.vue";
+import AccountSavings from "./partials/account/AccountSavings.vue";
+import {
+    BanknotesIcon,
+    CreditCardIcon,
+    ListBulletIcon,
+} from "@heroicons/vue/24/solid";
+import {
+    BanknotesIcon as BanknotesIcon_o,
+    CreditCardIcon as CreditCardIcon_o,
+    ListBulletIcon as ListBulletIcon_o,
+} from "@heroicons/vue/24/outline";
 
 const page = usePage();
 const user = computed(() => page.props.auth.user);
@@ -44,6 +57,59 @@ const quickActions = computed(() => [
         comingSoon: true,
     },
 ]);
+
+const avatar = "/img/avatar.png";
+
+const accountTabs = [
+    {
+        deactiveIcon: BanknotesIcon_o,
+        activeIcon: BanknotesIcon,
+        value: "savings",
+        label: "Tabungan",
+        component: AccountSummary,
+    },
+    {
+        deactiveIcon: ListBulletIcon_o,
+        activeIcon: ListBulletIcon,
+        value: "transactions",
+        label: "Transaksi",
+        component: AccountTransactions,
+    },
+    {
+        deactiveIcon: CreditCardIcon_o,
+        activeIcon: CreditCardIcon,
+        value: "installments",
+        label: "Cicilan",
+        component: AccountSavings,
+    },
+];
+
+const activeAccountTab = ref(accountTabs[0].value);
+
+const activeAccountComponent = computed(() => {
+    const tab = accountTabs.find(
+        (item) => item.value === activeAccountTab.value,
+    );
+
+    return tab?.component ?? null;
+});
+
+const resolveTabIcon = (tab) => {
+    if (!tab) {
+        return null;
+    }
+
+    const isActive = activeAccountTab.value === tab.value;
+
+    return isActive
+        ? (tab.activeIcon ?? tab.deactiveIcon ?? null)
+        : (tab.deactiveIcon ?? tab.activeIcon ?? null);
+};
+
+const tabIconClasses = (tab) =>
+    activeAccountTab.value === tab.value
+        ? "tw-text-primary"
+        : "tw-text-slate-400";
 
 const recommendedProducts = [
     {
@@ -95,32 +161,79 @@ const handleQuickAction = (action) => {
     <Head title="Member Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="tw-mx-auto tw-max-w-5xl tw-space-y-6 sm:tw-px-6 lg:tw-px-8">
-            <h1 class="tw-my-3 tw-text-3xl tw-font-bold tw-text-gray-800">
-                Selamat datang, {{ user?.name ?? "" }}!
-            </h1>
+        <div class="tw-px-6 lg:tw-px-64">
+            <div class="tw-mx-auto tw-w-full tw-flex tw-gap-3 md:tw-gap-9">
+                <img
+                    :src="avatar"
+                    alt=""
+                    class="tw-rounded-full tw-w-12 md:tw-w-24 tw-h-12 md:tw-h-24"
+                />
+                <div class="tw-flex-col tw-flex">
+                    <span class="tw-text-xl tw-font-extrabold md:tw-text-3xl">
+                        {{ user?.name ?? "" }}
+                    </span>
+                    <span class="tw-text-sm"> 100 Poin Loyalitas </span>
+                </div>
+            </div>
 
+            <div
+                class="tw-mt-5 tw-rounded-xl tw-bg-white tw-p-4 tw-shadow-sm tw-ring-1 tw-ring-slate-100"
+            >
+                <div
+                    class="tw-flex tw-flex-col tw-gap-3 md:tw-flex-row md:tw-items-center md:tw-justify-between"
+                >
+                    <span class="tw-font-extrabold">Rekening</span>
+                    <div
+                        class="tw-flex tw-flex-wrap tw-gap-2 tw-border-b tw-pb-[3px] tw-justify-between"
+                    >
+                        <button
+                            v-for="tab in accountTabs"
+                            :key="tab.value"
+                            type="button"
+                            class="tw-inline-flex tw-flex-col tw-items-center tw-gap-2 tw-px-3 tw-py-1 tw-text-sm tw-transition"
+                            :class="
+                                activeAccountTab === tab.value
+                                    ? 'tw-text-primary'
+                                    : 'tw-text-slate-600 hover:tw-text-primary'
+                            "
+                            @click="activeAccountTab = tab.value"
+                        >
+                            <component
+                                v-if="resolveTabIcon(tab)"
+                                :is="resolveTabIcon(tab)"
+                                :class="['tw-h-8 tw-w-8', tabIconClasses(tab)]"
+                            />
+                            <span class="tw-text-xs tw-font-semibold">{{
+                                tab.label
+                            }}</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="tw-my-3">
+                    <component :is="activeAccountComponent" />
+                </div>
+            </div>
             <MemberQuickActions
                 :actions="quickActions"
-                @select="handleQuickAction"
+                class="tw-mt-6"
+                @action-click="handleQuickAction"
             />
-        </div>
-
-        <div
-            class="tw-mx-auto tw-mt-6 tw-grid tw-w-full sm:tw-px-6 tw-max-w-5xl tw-grid-cols-2 tw-gap-3 md:tw-grid-cols-3 lg:tw-px-8"
-        >
-            <ProductRecommendationCard
-                v-for="product in recommendedProducts"
-                :key="product.id"
-                :title="product.title"
-                :description="product.description"
-                :price="product.price"
-                :currency="product.currency"
-                :quantity="product.quantity"
-                :thumbnail="product.thumbnail"
-                :tag="product.tag"
-                :tag-type="product.tagType"
-            />
+            <div
+                class="tw-mx-auto tw-mt-6 tw-grid tw-w-full tw-max-w-5xl tw-grid-cols-2 tw-gap-3 md:tw-grid-cols-3"
+            >
+                <ProductRecommendationCard
+                    v-for="product in recommendedProducts"
+                    :key="product.id"
+                    :title="product.title"
+                    :description="product.description"
+                    :price="product.price"
+                    :currency="product.currency"
+                    :quantity="product.quantity"
+                    :thumbnail="product.thumbnail"
+                    :tag="product.tag"
+                    :tag-type="product.tagType"
+                />
+            </div>
         </div>
     </AuthenticatedLayout>
 </template>

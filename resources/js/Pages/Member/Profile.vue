@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, Link, router, usePage } from "@inertiajs/vue3";
 import * as LucideIcons from "lucide-vue-next";
 import { computed, ref, watch } from "vue";
-import { Uploader } from 'vant';
+import { Uploader } from "vant";
 
 const page = usePage();
 
@@ -14,16 +14,20 @@ const props = defineProps({
 
 const localUser = ref({ ...props.user });
 
-watch(() => props.user, (newUser) => {
-    localUser.value = { ...newUser };
-}, { deep: true });
+watch(
+    () => props.user,
+    (newUser) => {
+        localUser.value = { ...newUser };
+    },
+    { deep: true },
+);
 
 const getInitial = (name) => {
-    return name?.charAt(0).toUpperCase() || '?';
+    return name?.charAt(0).toUpperCase() || "?";
 };
 
 const logout = () => {
-    router.post(route('logout'));
+    router.post(route("logout"));
 };
 
 const profileActions = computed(() => [
@@ -108,8 +112,8 @@ const handleFileChange = (file) => {
 
     fileList.value = [
         {
-        url: previewUrl,
-        isImage: true,
+            url: previewUrl,
+            isImage: true,
         },
     ];
 };
@@ -121,9 +125,9 @@ const uploadAvatar = () => {
     }
 
     const formData = new FormData();
-    formData.append('avatar', selectedFile.value);
+    formData.append("avatar", selectedFile.value);
 
-    router.post(route('member.profile.upload.avatar'), formData, {
+    router.post(route("member.profile.upload.avatar"), formData, {
         onSuccess: (page) => {
             uploadMessage.value = "Foto profil berhasil diperbarui!";
             // Reset state
@@ -139,7 +143,7 @@ const uploadAvatar = () => {
         onError: (errors) => {
             console.error("Upload error:", errors); // Untuk debugging
             uploadMessage.value = errors.avatar || "Gagal mengunggah foto.";
-        }
+        },
     });
 };
 
@@ -165,7 +169,9 @@ const triggerUploadModal = () => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800">
+            <h2
+                class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800"
+            >
                 Member Profile
             </h2>
         </template>
@@ -173,9 +179,13 @@ const triggerUploadModal = () => {
         <div class="tw-py-12">
             <div class="tw-mx-auto tw-max-w-3xl sm:tw-px-6 lg:tw-px-8">
                 <!-- Kotak Utama dengan background sedikit lebih gelap -->
-                <div class="tw-bg-gray-50 tw-shadow-lg tw-rounded-xl tw-p-6 tw-border tw-border-gray-200">
+                <div
+                    class="tw-bg-gray-50 tw-shadow-lg tw-rounded-xl tw-p-6 tw-border tw-border-gray-200"
+                >
                     <!-- Header Profil dengan warna oranye seperti di referensi -->
-                    <div class="tw-bg-gradient-to-r tw-from-orange-500 tw-to-orange-400 tw-rounded-2xl tw-w-full tw-text-white tw-p-6 tw-shadow-lg tw-mb-6">
+                    <div
+                        class="tw-bg-gradient-to-r tw-from-orange-500 tw-to-orange-400 tw-rounded-2xl tw-w-full tw-text-white tw-p-6 tw-shadow-lg tw-mb-6"
+                    >
                         <div class="tw-flex tw-items-center tw-gap-6">
                             <!-- Foto Profil -->
                             <div class="tw-relative tw-flex-shrink-0">
@@ -205,20 +215,30 @@ const triggerUploadModal = () => {
                                         v-if="showEditIcon"
                                         class="tw-absolute tw-bottom-1 tw-right-1 tw-bg-black/30 tw-p-1 tw-rounded-full tw-shadow-md tw-z-[9999]"
                                     >
-                                        <LucideIcons.Edit class="tw-h-4 tw-w-4 tw-text-white" />
+                                        <LucideIcons.Edit
+                                            class="tw-h-4 tw-w-4 tw-text-white"
+                                        />
                                     </div>
                                 </div>
                             </div>
                             <!-- Nama & Email -->
                             <div class="tw-flex-1">
-                                <h3 class="tw-text-lg tw-font-semibold tw-text-white">{{ localUser.name }}</h3>
-                                <p class="tw-text-white/90">{{ localUser.email }}</p>
+                                <h3
+                                    class="tw-text-lg tw-font-semibold tw-text-white"
+                                >
+                                    {{ localUser.name }}
+                                </h3>
+                                <p class="tw-text-white/90">
+                                    {{ localUser.email }}
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Fitur-fitur -->
-                    <div class="tw-bg-white tw-shadow-sm tw-rounded-lg tw-p-6 tw-mb-6">
+                    <div
+                        class="tw-bg-white tw-shadow-sm tw-rounded-lg tw-p-6 tw-mb-6"
+                    >
                         <div class="tw-grid tw-grid-cols-3 tw-gap-4">
                             <Link
                                 v-for="action in profileActions"
@@ -227,23 +247,30 @@ const triggerUploadModal = () => {
                                 :aria-disabled="!!action.comingSoon"
                                 class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-1 tw-rounded-xl tw-p-3 tw-text-center tw-transition tw-min-h-[7rem] tw-border tw-border-gray-200 hover:tw-bg-gray-50"
                                 :class="{
-                                    'tw-cursor-not-allowed tw-opacity-60 hover:tw-bg-slate-50': !!action.comingSoon
+                                    'tw-cursor-not-allowed tw-opacity-60 hover:tw-bg-slate-50':
+                                        !!action.comingSoon,
                                 }"
-                                @click="(event) => {
-                                    if (action.comingSoon) {
-                                        event.preventDefault();
-                                        return;
+                                @click="
+                                    (event) => {
+                                        if (action.comingSoon) {
+                                            event.preventDefault();
+                                            return;
+                                        }
+                                        handleQuickAction(action);
                                     }
-                                    handleQuickAction(action);
-                                }"
+                                "
                             >
-                                <span class="tw-flex tw-h-16 tw-w-16 tw-items-center tw-justify-center tw-rounded-3xl tw-bg-white tw-text-primary tw-shadow">
+                                <span
+                                    class="tw-flex tw-h-16 tw-w-16 tw-items-center tw-justify-center tw-rounded-3xl tw-bg-white tw-text-primary tw-shadow"
+                                >
                                     <component
                                         :is="resolveIcon(action.icon)"
                                         class="tw-h-8 tw-w-8"
                                     />
                                 </span>
-                                <div class="tw-text-sm tw-font-semibold tw-text-slate-700">
+                                <div
+                                    class="tw-text-sm tw-font-semibold tw-text-slate-700"
+                                >
                                     <p>{{ action.label }}</p>
                                 </div>
                             </Link>
@@ -258,18 +285,26 @@ const triggerUploadModal = () => {
                                 @click="router.visit(route('password.request'))"
                             >
                                 <div class="tw-flex tw-items-center tw-gap-3">
-                                    <p class="tw-font-medium tw-text-gray-800">Ganti Password</p>
+                                    <p class="tw-font-medium tw-text-gray-800">
+                                        Ganti Password
+                                    </p>
                                 </div>
-                                <i class="van-icon van-icon-arrow tw-text-gray-400"></i>
+                                <i
+                                    class="van-icon van-icon-arrow tw-text-gray-400"
+                                ></i>
                             </div>
                             <div
                                 class="tw-flex tw-items-center tw-justify-between tw-py-3 tw-px-4 tw-border-b tw-border-gray-200 tw-cursor-pointer hover:tw-bg-gray-50"
                                 @click="logout"
                             >
                                 <div class="tw-flex tw-items-center tw-gap-3">
-                                    <p class="tw-font-medium tw-text-gray-800">Logout</p>
+                                    <p class="tw-font-medium tw-text-gray-800">
+                                        Logout
+                                    </p>
                                 </div>
-                                <i class="van-icon van-icon-arrow tw-text-gray-400"></i>
+                                <i
+                                    class="van-icon van-icon-arrow tw-text-gray-400"
+                                ></i>
                             </div>
                         </div>
                     </div>
@@ -279,23 +314,42 @@ const triggerUploadModal = () => {
 
         <Teleport to="body">
             <!-- Preview Foto Profil -->
-            <div v-if="showPreviewAvatar" class="tw-fixed tw-inset-0 tw-bg-black/70 tw-flex tw-items-center tw-justify-center tw-z-[9999]">
-                <div class="tw-relative tw-bg-white tw-rounded-2xl tw-shadow-2xl tw-w-11/12 tw-max-w-md tw-overflow-hidden">
-                    <div class="tw-bg-gradient-to-r tw-from-orange-500 tw-to-orange-400 tw-p-4">
-                        <h3 class="tw-text-lg tw-font-semibold tw-text-center tw-text-white tw-mb-0">Preview Foto Profil</h3>
+            <div
+                v-if="showPreviewAvatar"
+                class="tw-fixed tw-inset-0 tw-bg-black/70 tw-flex tw-items-center tw-justify-center tw-z-[9999]"
+            >
+                <div
+                    class="tw-relative tw-bg-white tw-rounded-2xl tw-shadow-2xl tw-w-11/12 tw-max-w-md tw-overflow-hidden"
+                >
+                    <div
+                        class="tw-bg-gradient-to-r tw-from-orange-500 tw-to-orange-400 tw-p-4"
+                    >
+                        <h3
+                            class="tw-text-lg tw-font-semibold tw-text-center tw-text-white tw-mb-0"
+                        >
+                            Preview Foto Profil
+                        </h3>
                     </div>
 
                     <!-- Preview Foto -->
-                    <div class="tw-flex tw-items-center tw-justify-center tw-p-4 tw-pt-6 tw-pb-6">
+                    <div
+                        class="tw-flex tw-items-center tw-justify-center tw-p-4 tw-pt-6 tw-pb-6"
+                    >
                         <img
                             :src="localUser.avatar_url"
                             :alt="localUser.name"
                             class="tw-max-h-[60vh] tw-max-w-full tw-rounded-lg tw-shadow-md"
-                            @error="() => { /* Optional: handle broken image */ }"
+                            @error="
+                                () => {
+                                    /* Optional: handle broken image */
+                                }
+                            "
                         />
                     </div>
 
-                    <div class="tw-p-4 tw-pt-0 tw-flex tw-justify-between tw-gap-3">
+                    <div
+                        class="tw-p-4 tw-pt-0 tw-flex tw-justify-between tw-gap-3"
+                    >
                         <!-- Tombol Kembali -->
                         <button
                             @click="showPreviewAvatar = false"
@@ -317,14 +371,28 @@ const triggerUploadModal = () => {
             </div>
 
             <!-- Upload Foto Profil -->
-            <div v-if="isEditingAvatar" class="tw-fixed tw-inset-0 tw-bg-black/50 tw-flex tw-items-center tw-justify-center tw-z-[9000]">
-                <div class="tw-bg-white tw-rounded-xl tw-shadow-xl tw-w-11/12 tw-max-w-md tw-overflow-hidden">
-                    <div class="tw-bg-gradient-to-r tw-from-orange-500 tw-to-orange-400 tw-p-4">
-                        <h3 class="tw-text-lg tw-font-semibold tw-text-center tw-text-white tw-mb-0">Upload Foto Profil</h3>
+            <div
+                v-if="isEditingAvatar"
+                class="tw-fixed tw-inset-0 tw-bg-black/50 tw-flex tw-items-center tw-justify-center tw-z-[9000]"
+            >
+                <div
+                    class="tw-bg-white tw-rounded-xl tw-shadow-xl tw-w-11/12 tw-max-w-md tw-overflow-hidden"
+                >
+                    <div
+                        class="tw-bg-gradient-to-r tw-from-orange-500 tw-to-orange-400 tw-p-4"
+                    >
+                        <h3
+                            class="tw-text-lg tw-font-semibold tw-text-center tw-text-white tw-mb-0"
+                        >
+                            Upload Foto Profil
+                        </h3>
                     </div>
                     <div class="tw-p-6">
                         <div class="tw-text-left tw-mb-6">
-                            <label class="tw-block tw-text-gray-700 tw-font-medium tw-mb-2 tw-text-sm">Pilih Foto (Maksimal 2MB)</label>
+                            <label
+                                class="tw-block tw-text-gray-700 tw-font-medium tw-mb-2 tw-text-sm"
+                                >Pilih Foto (Maksimal 2MB)</label
+                            >
                             <Uploader
                                 v-model="fileList"
                                 :after-read="handleFileChange"
@@ -334,8 +402,19 @@ const triggerUploadModal = () => {
                         </div>
 
                         <!-- Pesan error atau sukses -->
-                        <div v-if="uploadMessage" class="tw-text-center tw-mb-4">
-                            <p :class="{'tw-text-sm': true, 'tw-text-red-500': !uploadMessage.includes('berhasil'), 'tw-text-green-500': uploadMessage.includes('berhasil')}">
+                        <div
+                            v-if="uploadMessage"
+                            class="tw-text-center tw-mb-4"
+                        >
+                            <p
+                                :class="{
+                                    'tw-text-sm': true,
+                                    'tw-text-red-500':
+                                        !uploadMessage.includes('berhasil'),
+                                    'tw-text-green-500':
+                                        uploadMessage.includes('berhasil'),
+                                }"
+                            >
                                 {{ uploadMessage }}
                             </p>
                         </div>

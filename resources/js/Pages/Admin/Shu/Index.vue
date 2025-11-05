@@ -18,4 +18,3 @@ import { Head } from "@inertiajs/vue3";
         <div class="tw-py-12"></div>
     </AuthenticatedLayout>
 </template>
-
