@@ -50,18 +50,18 @@ const memberLinks = [
         patterns: ["member.dashboard"],
     },
     {
-        name: "member.finances.index",
+        name: "member.finances",
         label: "Keuangan",
         icon: "balance-list-o",
         iconFilled: "balance-list",
-        patterns: ["member.finances.*"],
+        patterns: ["member.finances", "member.finances.*"],
     },
     {
-        name: "member.status.index",
+        name: "member.status",
         label: "Status",
         icon: "todo-list-o",
         iconFilled: "todo-list",
-        patterns: ["member.status.*"],
+        patterns: ["member.status", "member.status.*"],
     },
     {
         name: "profile.edit",
