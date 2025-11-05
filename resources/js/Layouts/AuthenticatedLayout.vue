@@ -21,51 +21,18 @@ const hasRole = (role) => roles.value.has(role);
 const isSuperAdmin = computed(() => hasRole("Super Admin"));
 const isAdminLike = computed(() => isSuperAdmin.value || hasRole("Admin"));
 
-const adminLinks = [
-    {
-        name: "admin.dashboard",
-        label: "Dashboard",
-        icon: "wap-home-o",
-        patterns: ["admin.dashboard"],
-    },
-    {
-        name: "admin.products",
-        label: "Kelola Produk",
-        icon: "shop-o",
-        patterns: ["admin.products"],
-    },
-    {
-        name: "admin.members",
-        label: "Kelola Anggota",
-        icon: "friends-o",
-        patterns: ["admin.members"],
-    },
-    {
-        name: "admin.approvals",
-        label: "Approval",
-        icon: "todo-list-o",
-        patterns: ["admin.approvals"],
-    },
-    {
-        name: "admin.ledger",
-        label: "Ledger",
-        icon: "notes-o",
-        patterns: ["admin.ledger"],
-    },
-    {
-        name: "profile.edit",
-        label: "Profile",
-        icon: "user-o",
-        patterns: ["profile.*"],
-    },
-];
-
 const superAdminLinks = [
     {
-        name: "superadmin.dashboard",
+        name: "superadmin.admins.index",
         label: "Kelola Admin",
         icon: "manager-o",
-        patterns: ["superadmin.dashboard", "superadmin.admins.index"],
+        patterns: ["superadmin.admins.*"],
+    },
+    {
+        name: "superadmin.system-configuration.index",
+        label: "Konfigurasi Sistem",
+        icon: "manager-o",
+        patterns: ["superadmin.system-configuration.*"],
     },
     {
         name: "profile.edit",
@@ -83,25 +50,82 @@ const memberLinks = [
         patterns: ["member.dashboard"],
     },
     {
-        name: "member.finances",
+        name: "member.finances.index",
         label: "Keuangan",
         icon: "balance-list-o",
         iconFilled: "balance-list",
-        patterns: ["member.finances"],
+        patterns: ["member.finances.*"],
     },
     {
-        name: "member.status",
+        name: "member.status.index",
         label: "Status",
         icon: "todo-list-o",
         iconFilled: "todo-list",
-        patterns: ["member.status"],
+        patterns: ["member.status.*"],
     },
     {
-        name: "member.profile",
+        name: "profile.edit",
         label: "Profile",
         icon: "user-o",
         iconFilled: "user",
-        patterns: ["member.profile", "member.profile.*"],
+        patterns: ["profile.edit"],
+    },
+];
+
+const adminLinks = [
+    {
+        name: "admin.dashboard",
+        label: "Dashboard",
+        icon: "location-o",
+        patterns: ["admin.dashboard"],
+    },
+    {
+        name: "admin.members.index",
+        label: "Kelola Anggota",
+        icon: "user-o",
+        patterns: ["admin.members.*"],
+    },
+    {
+        name: "admin.product-categories.index",
+        label: "Kelola Kategori Produk",
+        icon: "apps-o",
+        patterns: ["admin.product-categories.*"],
+    },
+    {
+        name: "admin.products.index",
+        label: "Kelola Produk",
+        icon: "send-gift-o",
+        patterns: ["admin.products.*"],
+    },
+    {
+        name: "admin.transactions.index",
+        label: "Verifikasi Transaksi",
+        icon: "orders-o",
+        patterns: ["admin.transactions.*"],
+    },
+    {
+        name: "admin.installments.index",
+        label: "Verifikasi Cicilan",
+        icon: "credit-pay",
+        patterns: ["admin.installments.*"],
+    },
+    {
+        name: "admin.savings.index",
+        label: "Verifikasi Simpanan",
+        icon: "balance-o",
+        patterns: ["admin.savings.*"],
+    },
+    {
+        name: "admin.shu.index",
+        label: "SHU",
+        icon: "description-o",
+        patterns: ["admin.shu.*"],
+    },
+    {
+        name: "profile.edit",
+        label: "Profile",
+        icon: "user-o",
+        patterns: ["profile.edit"],
     },
 ];
 

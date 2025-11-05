@@ -30,7 +30,7 @@ return new class extends Migration
             $table->bigInteger('amount');
             $table->string('type', 50);
             $table->text('description')->nullable();
-            $table->string('bukti_transfer')->nullable(false);
+            $table->string('bukti_transfer')->nullable();
             $table->date('transaction_date');
             $table->timestamps();
         });

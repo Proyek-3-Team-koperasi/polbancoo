@@ -6,10 +6,11 @@ use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class ProductsController extends Controller
+class ShuController extends Controller
 {
-    public function index(): Response
+    public function __invoke(): Response
     {
-        return Inertia::render('Admin/Products/Index');
+        return Inertia::render('Admin/Shu/Index');
     }
 }
+
