@@ -5,18 +5,20 @@ import ProductRecommendationCard from "@/Components/member/ProductRecommendation
 import { Head, router, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 import AccountSummary from "./partials/account/AccountSummary.vue";
+import AccountInstallments from "./partials/account/AccountInstallments.vue";
+import AccountPoints from "./partials/account/AccountPoints.vue";
 import AccountTransactions from "./partials/account/AccountTransactions.vue";
-import AccountSavings from "./partials/account/AccountSavings.vue";
 import {
     BanknotesIcon,
-    CreditCardIcon,
     ListBulletIcon,
+    CreditCardIcon,
 } from "@heroicons/vue/24/solid";
 import {
-    BanknotesIcon as BanknotesIcon_o,
-    CreditCardIcon as CreditCardIcon_o,
-    ListBulletIcon as ListBulletIcon_o,
+    CreditCardIcon as CreditCardIconOutline,
+    BanknotesIcon as BanknotesIconOutline,
+    ListBulletIcon as ListBulletIconOutline,
 } from "@heroicons/vue/24/outline";
+import * as LucideIcons from "lucide-vue-next";
 
 const page = usePage();
 const user = computed(() => page.props.auth.user);
@@ -62,25 +64,33 @@ const avatar = "/img/avatar.png";
 
 const accountTabs = [
     {
-        deactiveIcon: BanknotesIcon_o,
+        deactiveIcon: BanknotesIconOutline,
         activeIcon: BanknotesIcon,
         value: "savings",
         label: "Tabungan",
         component: AccountSummary,
     },
+
     {
-        deactiveIcon: ListBulletIcon_o,
+        deactiveIcon: CreditCardIconOutline,
+        activeIcon: CreditCardIcon,
+        value: "installments",
+        label: "Cicilan",
+        component: AccountInstallments,
+    },
+    {
+        deactiveIcon: "Coins",
+        activeIcon: "Coins",
+        value: "Points",
+        label: "Points",
+        component: AccountPoints,
+    },
+    {
+        deactiveIcon: ListBulletIconOutline,
         activeIcon: ListBulletIcon,
         value: "transactions",
         label: "Transaksi",
         component: AccountTransactions,
-    },
-    {
-        deactiveIcon: CreditCardIcon_o,
-        activeIcon: CreditCardIcon,
-        value: "installments",
-        label: "Cicilan",
-        component: AccountSavings,
     },
 ];
 
@@ -94,6 +104,18 @@ const activeAccountComponent = computed(() => {
     return tab?.component ?? null;
 });
 
+const normalizeIcon = (icon) => {
+    if (!icon) {
+        return null;
+    }
+
+    if (typeof icon === "string") {
+        return LucideIcons[icon] ?? null;
+    }
+
+    return icon;
+};
+
 const resolveTabIcon = (tab) => {
     if (!tab) {
         return null;
@@ -101,9 +123,15 @@ const resolveTabIcon = (tab) => {
 
     const isActive = activeAccountTab.value === tab.value;
 
-    return isActive
-        ? (tab.activeIcon ?? tab.deactiveIcon ?? null)
-        : (tab.deactiveIcon ?? tab.activeIcon ?? null);
+    const primaryIcon = normalizeIcon(
+        isActive ? tab.activeIcon : tab.deactiveIcon,
+    );
+
+    if (primaryIcon) {
+        return primaryIcon;
+    }
+
+    return normalizeIcon(isActive ? tab.deactiveIcon : tab.activeIcon);
 };
 
 const tabIconClasses = (tab) =>
@@ -180,11 +208,13 @@ const handleQuickAction = (action) => {
                 class="tw-mt-5 tw-rounded-xl tw-bg-white tw-p-4 tw-shadow-sm tw-ring-1 tw-ring-slate-100"
             >
                 <div
-                    class="tw-flex tw-flex-col tw-gap-3 md:tw-flex-row md:tw-items-center md:tw-justify-between"
+                    class="tw-flex tw-flex-col tw-gap-3 md:tw-items-center md:tw-justify-between"
                 >
-                    <span class="tw-font-extrabold">Rekening</span>
+                    <span class="tw-font-extrabold md:tw-text-xl"
+                        >Rekening</span
+                    >
                     <div
-                        class="tw-flex tw-flex-wrap tw-gap-2 tw-border-b tw-pb-[3px] tw-justify-between"
+                        class="tw-flex tw-w-full md:tw-justify-evenly tw-flex-wrap tw-gap-2 tw-border-b tw-pb-[3px] tw-justify-between"
                     >
                         <button
                             v-for="tab in accountTabs"

@@ -1,5 +1,27 @@
 <script setup>
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/vue/24/solid";
+
+const props = defineProps({
+    totalBalance: {
+        type: Number,
+        required: true,
+        default: 1500000,
+    },
+    totalInflow: {
+        type: Number,
+        required: true,
+        default: 1000000,
+    },
+    totalOutflow: {
+        type: Number,
+        required: true,
+        default: 1000000,
+    },
+});
+
+function humanizeNumber(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
 </script>
 
 <template>
@@ -8,7 +30,9 @@ import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/vue/24/solid";
             <span class="tw-font-semibold">Total Tabungan</span>
             <div class="tw-flex tw-place-items-start tw-gap-2">
                 <span class="tw-mt-1">Rp.</span>
-                <span class="tw-text-3xl tw-font-extrabold"> 1.500.000 </span>
+                <span class="tw-text-3xl tw-font-extrabold">
+                    {{ humanizeNumber(totalBalance) }}
+                </span>
             </div>
         </div>
     </div>
@@ -19,7 +43,9 @@ import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/vue/24/solid";
             <ArrowDownIcon class="tw-h-5 tw-w-5 tw-text-green-600" />
             <div class="tw-flex-col tw-flex">
                 <span class="tw-text-xs">Saldo Masuk</span>
-                <span class="tw-text-base tw-font-semibold">1.000.000</span>
+                <span class="tw-text-base tw-font-semibold">{{
+                    humanizeNumber(totalInflow)
+                }}</span>
             </div>
         </div>
         <div
@@ -28,7 +54,9 @@ import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/vue/24/solid";
             <ArrowUpIcon class="tw-h-5 tw-w-5 tw-text-red-600" />
             <div class="tw-flex-col tw-flex">
                 <span class="tw-text-xs">Saldo Keluar</span>
-                <span class="tw-text-base tw-font-semibold">1.000.000</span>
+                <span class="tw-text-base tw-font-semibold">{{
+                    humanizeNumber(totalOutflow)
+                }}</span>
             </div>
         </div>
     </div>
