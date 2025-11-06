@@ -38,6 +38,8 @@ const Props = defineProps({
 function humanizeNumber(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
+
+const toPointHistory = "#";
 </script>
 
 <template>
@@ -47,7 +49,7 @@ function humanizeNumber(number) {
             <span class="tw-text-xs">Total Point Periode Ini</span>
             <div class="tw-flex tw-row tw-items-center tw-mt-1 tw-gap-1">
                 <Coins class="tw-text-3xl tw-text-black" />
-                <span class="tw-text-3xl tw-font-extrabold">{{
+                <span class="tw-text-3xl tw-font-bold md:tw-font-extrabold">{{
                     humanizeNumber(userPoints)
                 }}</span>
                 <span
@@ -62,23 +64,30 @@ function humanizeNumber(number) {
     </a>
     <div class="tw-flex tw-flex-col tw-mt-3 tw-text-xs">
         <div class="tw-flex tw-flex-row tw-justify-between tw-mt-3">
-            <span>History Poin</span>
-            <span class="tw-underline">Lihat Detail &gt;</span>
+            <span class="tw-text-sm md:tw-text-base">History Poin</span>
+            <a :href="toPointHistory" class="tw-underline">Lihat Detail &gt;</a>
         </div>
         <div class="tw-mt-2 tw-text-gray-600">
-            <div
+            <template
                 v-for="(transaction, index) in last3Transactions"
                 :key="index"
-                class="tw-flex tw-items-start tw-gap-3 tw-mb-3"
             >
-                <div class="tw-w-16 tw-text-xs">{{ transaction.date }}</div>
-                <div class="tw-flex-1 tw-text-xs">
-                    {{ transaction.description }}
-                </div>
-                <div class="tw-text-xs tw-text-green-600">
-                    {{ humanizeNumber(transaction.points) }}
-                </div>
-            </div>
+                <a href="{{ transaction.href }}">
+                    <div
+                        class="tw-flex tw-items-start tw-gap-3 tw-mb-0 hover:tw-bg-orange-200 tw-p-2 tw-rounded-md"
+                    >
+                        <div class="tw-w-16 tw-text-xs">
+                            {{ transaction.date }}
+                        </div>
+                        <div class="tw-flex-1 tw-text-xs">
+                            {{ transaction.description }}
+                        </div>
+                        <div class="tw-text-xs tw-text-green-600">
+                            {{ humanizeNumber(transaction.points) }}
+                        </div>
+                    </div>
+                </a>
+            </template>
         </div>
     </div>
 </template>

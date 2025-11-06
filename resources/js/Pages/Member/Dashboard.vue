@@ -189,7 +189,7 @@ const handleQuickAction = (action) => {
     <Head title="Member Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="tw-px-6 lg:tw-px-64">
+        <div class="tw-px-1 md:tw-px-64">
             <div class="tw-mx-auto tw-w-full tw-flex tw-gap-3 md:tw-gap-9">
                 <img
                     :src="avatar"
@@ -214,13 +214,13 @@ const handleQuickAction = (action) => {
                         >Rekening</span
                     >
                     <div
-                        class="tw-flex tw-w-full md:tw-justify-evenly tw-flex-wrap tw-gap-2 tw-border-b tw-pb-[3px] tw-justify-between"
+                        class="tw-flex tw-w-full md:tw-justify-evenly tw-gap-0 tw-border-b tw-pb-[3px] tw-justify-between"
                     >
                         <button
                             v-for="tab in accountTabs"
                             :key="tab.value"
                             type="button"
-                            class="tw-inline-flex tw-flex-col tw-items-center tw-gap-2 tw-px-3 tw-py-1 tw-text-sm tw-transition"
+                            class="tw-inline-flex tw-flex-col tw-items-center tw-gap-0 tw-px-3 tw-py-1 tw-text-sm tw-transition"
                             :class="
                                 activeAccountTab === tab.value
                                     ? 'tw-text-primary'
@@ -231,9 +231,12 @@ const handleQuickAction = (action) => {
                             <component
                                 v-if="resolveTabIcon(tab)"
                                 :is="resolveTabIcon(tab)"
-                                :class="['tw-h-8 tw-w-8', tabIconClasses(tab)]"
+                                :class="[
+                                    'tw-h-5 tw-w-5 md:tw-h-8 md:tw-w-8',
+                                    tabIconClasses(tab),
+                                ]"
                             />
-                            <span class="tw-text-xs tw-font-semibold">{{
+                            <span class="tw-text-[0.6rem] tw-font-semibold">{{
                                 tab.label
                             }}</span>
                         </button>
@@ -245,11 +248,14 @@ const handleQuickAction = (action) => {
             </div>
             <MemberQuickActions
                 :actions="quickActions"
-                class="tw-mt-6"
+                class="tw-mt-3"
                 @action-click="handleQuickAction"
             />
+            <div class="tw-mt-4">
+                <span class="tw-font-bold">Rekomendasi Produk</span>
+            </div>
             <div
-                class="tw-mx-auto tw-mt-6 tw-grid tw-w-full tw-max-w-5xl tw-grid-cols-2 tw-gap-3 md:tw-grid-cols-3"
+                class="tw-mx-auto tw-mt-1 tw-grid tw-w-full tw-max-w-5xl tw-grid-cols-2 tw-gap-3 md:tw-grid-cols-3"
             >
                 <ProductRecommendationCard
                     v-for="product in recommendedProducts"

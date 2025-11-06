@@ -26,15 +26,21 @@ function humanizeNumber(number) {
 
 <template>
     <div class="tw-border tw-rounded-lg">
-        <div class="tw-rounded-t-24 tw-px-6 tw-py-4 tw-flex tw-flex-col">
-            <span class="tw-font-semibold">Total Tabungan</span>
-            <div class="tw-flex tw-place-items-start tw-gap-2">
-                <span class="tw-mt-1">Rp.</span>
-                <span class="tw-text-3xl tw-font-extrabold">
-                    {{ humanizeNumber(totalBalance) }}
-                </span>
+        <a href="">
+            <div
+                class="tw-rounded-t-24 tw-px-4 md:tw-px-4 tw-py-4 tw-flex tw-flex-col"
+            >
+                <span class="tw-font-normal md:tw-font-semibold"
+                    >Total Tabungan</span
+                >
+                <div class="tw-flex tw-place-items-start tw-gap-2">
+                    <span class="tw-mt-1">Rp.</span>
+                    <span class="tw-text-3xl tw-font-bold md:tw-font-extrabold">
+                        {{ humanizeNumber(totalBalance) }}
+                    </span>
+                </div>
             </div>
-        </div>
+        </a>
     </div>
     <div class="tw-flex tw-tw-flex-row tw-gap-3 tw-w-full tw-mt-2">
         <div

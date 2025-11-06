@@ -38,7 +38,7 @@ function humanizeNumber(number) {
         <div class="tw-mt-4 tw-rounded-md tw-border tw-flex tw-flex-col tw-p-4">
             <span class="tw-text-xs">Total Nominal Harus Dibayar</span>
             <div class="tw-flex tw-row tw-items-center tw-mt-1">
-                <span class="tw-text-3xl tw-font-extrabold"
+                <span class="tw-text-3xl tw-font-bold md:tw-font-extrabold"
                     >Rp{{ humanizeNumber(totalAmountDue) }}</span
                 >
                 <span
