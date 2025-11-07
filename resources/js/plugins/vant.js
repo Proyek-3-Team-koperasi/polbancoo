@@ -21,7 +21,7 @@ import {
     Search,
     DropdownMenu,
     DropdownItem,
-    Pagination
+    Pagination,
     Checkbox,
     CheckboxGroup
 } from "vant";
