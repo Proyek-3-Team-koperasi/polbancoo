@@ -18,6 +18,8 @@ import {
     RadioGroup,
     Stepper,
     Toast,
+    Checkbox,
+    CheckboxGroup
 } from "vant";
 
 export function registerVant(app) {
@@ -40,4 +42,6 @@ export function registerVant(app) {
     app.use(RadioGroup);
     app.use(Stepper);
     app.use(Toast);
+    app.use(Checkbox);
+    app.use(CheckboxGroup);
 }
