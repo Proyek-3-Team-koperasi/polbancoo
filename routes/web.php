@@ -42,7 +42,7 @@ Route::prefix('admin')
     ->group(function () {
         Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
         Route::get('/product-categories', ProductCategoriesController::class)->name('product-categories.index');
-        Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
+        Route::resource('/products', ProductsController::class);
         Route::get('/transactions', TransactionsController::class)->name('transactions.index');
         Route::get('/installments', InstallmentsController::class)->name('installments.index');
         Route::get('/savings', SavingsController::class)->name('savings.index');
