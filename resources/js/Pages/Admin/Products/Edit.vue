@@ -28,7 +28,6 @@ const numberFormatter = new Intl.NumberFormat("id-ID", {
 let formatterfn = numberFormatter.format;
 console.log(props.product);
 </script>
-
 <template>
     <Head title="Edit Produk" />
 

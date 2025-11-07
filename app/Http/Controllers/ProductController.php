@@ -29,25 +29,5 @@ class ProductController extends Controller
         ]);
     }
 
-    public function edit(Product $product)
-    {
-        // dd($product);
-        // // Start with the base query
-        // $query = Product::with('category'); // Eager load category relationship
-
-        // // Apply search filter if present
-        // $query->when($request->input('search'), function ($query, $search) {
-        //     $query->where('name', 'like', "%{$search}%")
-        //           ->orWhere('sku', 'like', "%{$search}%");
-        // });
-
-        // // Get paginated results and append query string (for filters)
-        // $products = $query->paginate(10)->withQueryString();
-
-        // Render the Inertia page component and pass props
-        return Inertia::render('Admin/Products/Edit', [
-            'product' => $product,
-            // 'filters' => $request->only(['search']), // Send filters back to the view
-        ]);
-    }
+  
 }
