@@ -259,6 +259,13 @@ watch(
                     :show-cart="false"
                 />
             </template>
+            <template v-else>
+                <MemberMobileTopBar
+                    title="Checkout"
+                    @back="history.back()"
+                    :show-cart="false"
+                />
+            </template>
             <MemberTopBar :links="currentMemberLinks" :user="user" />
 
             <main class="tw-flex-1">

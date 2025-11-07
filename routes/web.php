@@ -1,5 +1,6 @@
 <?php
 
+// Admin Controllers
 use App\Http\Controllers\Admin\ApprovalsController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\InstallmentsController;
@@ -10,12 +11,18 @@ use App\Http\Controllers\Admin\ProductsController;
 use App\Http\Controllers\Admin\SavingsController;
 use App\Http\Controllers\Admin\ShuController;
 use App\Http\Controllers\Admin\TransactionsController;
+// Member Controllers
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Member\CartController;
+use App\Http\Controllers\Member\CheckoutCashController;
+use App\Http\Controllers\Member\CheckoutController;
+use App\Http\Controllers\Member\CheckoutCreditController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
 use App\Http\Controllers\Member\FinancesController;
+// Super Admin Controllers
 use App\Http\Controllers\Member\StatusController;
 use App\Http\Controllers\ProfileController;
+// Other Controllers
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\SystemConfigurationController;
 use App\Http\Controllers\WelcomeController;
@@ -65,17 +72,20 @@ Route::prefix('member')
     ->name('member.')
     ->middleware(['auth', 'verified', 'role:Anggota'])
     ->group(function () {
-    Route::get('/dashboard', MemberDashboardController::class)->name('dashboard');
-    Route::get('/cart', CartController::class)->name('cart');
+        Route::get('/dashboard', MemberDashboardController::class)->name('dashboard');
+        Route::get('/cart', CartController::class)->name('cart');
         Route::get('/finances', [FinancesController::class, 'index'])->name('finances');
         Route::get('/finances/add/{type}', [FinancesController::class, 'create'])->name('finances.create');
         Route::post('/finances/store', [FinancesController::class, 'store'])->name('finances.store');
-    Route::get('/status', StatusController::class)->name('status');
-    Route::get('/status/{id}', [StatusController::class, 'show'])->name('status.show');
-    Route::get('/products', [\App\Http\Controllers\Member\ProductsController::class, 'index'])->name('products');
+        Route::get('/status', StatusController::class)->name('status');
+        Route::get('/checkout', CheckoutController::class)->name('checkout');
+        Route::get('/checkout/cash', CheckoutCashController::class)->name('checkout.cash');
+        Route::get('/checkout/credit', CheckoutCreditController::class)->name('checkout.credit');
+        Route::get('/status/{id}', [StatusController::class, 'show'])->name('status.show');
+        Route::get('/products', [ProductsController::class, 'index'])->name('products');
         Route::get('/products/{product:slug}', [\App\Http\Controllers\Member\ProductsController::class, 'show'])->name('products.show');
-    Route::get('/profile', \App\Http\Controllers\Member\ProfileController::class)->name('profile');
-    Route::post('/profile/upload-avatar', [\App\Http\Controllers\Member\ProfileController::class, 'uploadAvatar'])->name('profile.upload.avatar');
+        Route::get('/profile', \App\Http\Controllers\Member\ProfileController::class)->name('profile');
+        Route::post('/profile/upload-avatar', [\App\Http\Controllers\Member\ProfileController::class, 'uploadAvatar'])->name('profile.upload.avatar');
     });
 
 Route::middleware('auth')->group(function () {
