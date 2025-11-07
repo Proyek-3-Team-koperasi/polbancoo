@@ -1,117 +1,304 @@
-<script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
-import { Link } from "@inertiajs/vue3";
-import { ref } from 'vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+<script setup lang="ts">
+import type {
+  ColumnDef,
+  ColumnFiltersState,
+  ExpandedState,
+  SortingState,
+  VisibilityState,
+} from "@tanstack/vue-table"
 
-const props = defineProps({
-    products: Object,
+import {
+  FlexRender,
+  getCoreRowModel,
+  getExpandedRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useVueTable,
+} from "@tanstack/vue-table"
+import { h, ref } from "vue"
+import { valueUpdater } from "@/lib/utils"
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head, Link } from "@inertiajs/vue3";
+import { Button } from "@/components/ui/button"
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Input } from "@/components/ui/input"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+
+
+export interface Product {
+  id: string
+  image: string
+  name: string,
+  stock: number,
+  cost: number,
+}
+
+const data: Product[] = [
+  {
+    id: "prod_001",
+    image: "https://picsum.photos/seed/laptop/400/300",
+    name: "Laptop Pro 16 inch",
+    stock: 25,
+    cost: 21500000,
+  },
+  {
+    id: "prod_002",
+    image: "https://picsum.photos/seed/keyboard/400/300",
+    name: "Mechanical Keyboard",
+    stock: 112,
+    cost: 850000,
+  },
+  {
+    id: "prod_003",
+    image: "https://picsum.photos/seed/mouse/400/300",
+    name: "Wireless Optical Mouse",
+    stock: 230,
+    cost: 275000,
+  },
+  {
+    id: "prod_004",
+    image: "https://picsum.photos/seed/headphones/400/300",
+    name: "Bluetooth Headphones",
+    stock: 78,
+    cost: 1200000,
+  },
+  {
+    id: "prod_005",
+    image: "https://picsum.photos/seed/monitor/400/300",
+    name: "27-inch 4K Monitor",
+    stock: 41,
+    cost: 4500000,
+  },
+  {
+    id: "prod_006",
+    image: "https://picsum.photos/seed/coffeemug/400/300",
+    name: "Insulated Coffee Mug",
+    stock: 450,
+    cost: 150000,
+  },
+]
+
+const isSheetOpen = ref(false)
+const selectedProduct = ref<Product | null>(null)
+
+// Function to open the sheet with a specific product
+function openProductDetails(product: Product) {
+  selectedProduct.value = product
+  isSheetOpen.value = true
+  console.log(product)
+}
+
+const columns: ColumnDef<Product>[] = [
+  {
+    accessorKey: "image",
+    header: "",
+    cell: ({ row }) => h("img", { class: "tw-h-24 tw-w-24 tw-rounded tw-object-cover", src: row.getValue("image") }),
+  },
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return h(Button, {
+        variant: "nama",
+      }, () => ["Name", h("div", { class: "tw-ml-2 tw-h-4 tw-w-4" })])
+    },
+    cell: ({ row }) => h("div", { class: "tw-lowercase" }, row.getValue("name")),
+  },
+  {
+    accessorKey: "stock",
+    header: () => h("div", { class: "tw-text-right" }, "Stok"),
+    cell: ({ row }) => h("div", { class: "tw-text-right tw-font-medium" }, row.getValue("stock")),
+  },
+  {
+    accessorKey: "cost",
+    header: () => h("div", { class: "tw-text-right" }, "Harga"),
+    cell: ({ row }) => {
+      const amount = Number.parseFloat(row.getValue("cost"))
+
+
+      const formatted = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+      }).format(amount)
+
+      return h("div", { class: "tw-text-right tw-font-medium" }, formatted)
+    },
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    // cell: ({ row }) => {
+    //   const payment = row.original
+
+    //   return h(DropdownAction, {
+    //     payment,
+    //     onExpand: row.toggleExpanded,
+    //   })
+    // },
+  },
+]
+
+const sorting = ref<SortingState>([])
+const columnFilters = ref<ColumnFiltersState>([])
+const columnVisibility = ref<VisibilityState>({})
+const rowSelection = ref({})
+const expanded = ref<ExpandedState>({})
+
+const table = useVueTable({
+  data,
+  columns,
+  getCoreRowModel: getCoreRowModel(),
+  getPaginationRowModel: getPaginationRowModel(),
+  getSortedRowModel: getSortedRowModel(),
+  getFilteredRowModel: getFilteredRowModel(),
+  getExpandedRowModel: getExpandedRowModel(),
+  onSortingChange: updaterOrValue => valueUpdater(updaterOrValue, sorting),
+  onColumnFiltersChange: updaterOrValue => valueUpdater(updaterOrValue, columnFilters),
+  onColumnVisibilityChange: updaterOrValue => valueUpdater(updaterOrValue, columnVisibility),
+  onRowSelectionChange: updaterOrValue => valueUpdater(updaterOrValue, rowSelection),
+  onExpandedChange: updaterOrValue => valueUpdater(updaterOrValue, expanded),
+  state: {
+    get sorting() { return sorting.value },
+    get columnFilters() { return columnFilters.value },
+    get columnVisibility() { return columnVisibility.value },
+    get rowSelection() { return rowSelection.value },
+    get expanded() { return expanded.value },
+  },
 })
-
-const model = ref({
-    search: '',
-    kategori: 0,
-});
-
-const kategoriOptions = [
-    { text: 'Option1', value: 0 },
-    { text: 'Option2', value: 1 },
-    { text: 'Option3', value: 2 },
-];
-let currentPage =  ref(1);
-
-const numberFormatter = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' })
 </script>
 
 <template>
-    <Head title="Kelola Produk" />
 
-    <AuthenticatedLayout>
-        <template #header>
-            <h2
-                class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800"
-            >
-                Kelola Produk
-            </h2>
-        </template>
-        <div class="tw-grid-cols-4 tw-grid tw-bg-white " >
-            <div class="tw-col-span-3"></div>
-            <div class="tw-flex tw-flex-col-reverse " >
-                <Link :href="route('admin.products.create')" >
-                    <PrimaryButton class="tw-m-4 tw-text-left" >Tambah Produk +</PrimaryButton>
-                </Link>
+  <Head title="Kelola Produk" />
+
+  <AuthenticatedLayout>
+
+    <template #header>
+      <h2 class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800">
+        Kelola Produk
+      </h2>
+    </template>
+
+    <div class="tw-bg-white tw-rounded-md tw-p-4">
+
+
+      <div class="tw-w-full ">
+        <div class="tw-flex tw-items-center tw-py-4 ">
+          <Input class="tw-max-w-sm" placeholder="Filter nama..."
+            :model-value="table.getColumn('name')?.getFilterValue() as string"
+            @update:model-value=" table.getColumn('name')?.setFilterValue($event)" />
+          <Button asChild class="tw-ml-auto"  >
+            <Link :href="route('admin.products.create')" >
+              Tambah Produk
+            </Link>
+          </Button>
+        </div>
+        <div class="tw-rounded-md tw-border">
+
+          <Table>
+            <TableHeader>
+              <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
+                <TableHead v-for="header in headerGroup.headers" :key="header.id">
+                  <FlexRender v-if="!header.isPlaceholder" :render="header.column.columnDef.header"
+                    :props="header.getContext()" />
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <template v-if="table.getRowModel().rows?.length">
+                <template v-for="row in table.getRowModel().rows" :key="row.id">
+                  <TableRow class="tw-cursor-pointer" @click="openProductDetails(row.original)">
+                    <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
+                      <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
+
+                    </TableCell>
+                  </TableRow>
+                </template>
+              </template>
+
+              <TableRow v-else>
+                <TableCell :colspan="columns.length" class="tw-h-24 tw-text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+
+        </div>
+
+        <div class="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4">
+          <div class="tw-space-x-2">
+            <Button variant="outline" size="sm" :disabled="!table.getCanPreviousPage()" @click="table.previousPage()">
+              Previous
+            </Button>
+            <Button variant="outline" size="sm" :disabled="!table.getCanNextPage()" @click="table.nextPage()">
+              Next
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <Dialog v-model:open="isSheetOpen">
+
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{{ selectedProduct?.name }}</DialogTitle>
+          </DialogHeader>
+
+          <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6 tw-py-4">
+            <div class="tw-flex tw-items-start tw-justify-center">
+              <img :src="selectedProduct.image" :alt="selectedProduct.name"
+                class="tw-w-full tw-max-w-md tw-rounded-md tw-object-cover tw-shadow-md" />
             </div>
-            <van-search v-model="model.search" class="tw-col-span-4" />
-        </div>
-<!-- 
-        <van-pagination v-model="currentPage" force-ellipses :total-items="100" :show-page-size="5">
-            <template #prev-text>
-                <van-icon name="arrow-left" />
-            </template>
-            <template #next-text>
-                <van-icon name="arrow" />
-            </template>
-        </van-pagination> -->
+
+            <div class="tw-flex tw-flex-col">
+              <div class="tw-flex tw-flex-col tw-gap-2">
+                <div class="tw-flex tw-flex-col">
+                  <span class="tw-text-sm">Harga</span>
+                  <span class="tw-text-lg tw-font-bold">Rp {{ selectedProduct.cost }}</span>
+                </div>
+                <div class="tw-flex tw-flex-col">
+                  <span class="tw-text-sm">Stok</span>
+                  <span class="tw-text-lg tw-font-bold">{{ selectedProduct.stock }}</span>
+                </div>
+                <div class="tw-flex tw-flex-col">
+                  <span class="tw-text-sm">Kategori</span>
+                  <span class="tw-text-lg tw-font-bold">Kategori</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter>
+
+            <Button asChild>
+              <Link :href="route('admin.products.edit', selectedProduct.id)">
+              Edit
+              </Link>
+            </Button>
+
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
 
 
+  </AuthenticatedLayout>
 
-
-
-        <div class="tw-relative tw-overflow-x-auto">
-            <table class="tw-w-full tw-text-sm tw-text-left tw-rtl:text-right tw-text-gray-500 tw-dark:text-gray-400">
-                <thead
-                    class="tw-text-xs tw-text-gray-700 tw-uppercase tw-bg-gray-50 tw-dark:bg-gray-700 tw-dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="tw-px-6 tw-py-3">
-                            ID
-                        </th>
-                        <th scope="col" class="tw-px-6 tw-py-3">
-                            Produk
-                        </th>
-                        <th scope="col" class="tw-px-6 tw-py-3">
-                            Nama
-                        </th>
-                        <th scope="col" class="tw-px-6 tw-py-3">
-                            Category
-                        </th>
-                        <th scope="col" class="tw-px-6 tw-py-3">
-                            Stock
-                        </th>
-                        <th scope="col" class="tw-px-6 tw-py-3">
-                            Harga Jual
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="product in props.products.data" :key="product.id"
-                        class="tw-bg-white tw-border-b tw-dark:bg-gray-800 tw-dark:border-gray-700 tw-border-gray-200">
-                        <th scope="row"
-                            class="tw-px-6 tw-py-4 tw-font-medium tw-text-gray-900 tw-whitespace-nowrap tw-dark:text-white">
-                            {{ product.id }}
-                        </th>
-                        <td class="tw-px-6 tw-py-4">
-                            <van-image width="100" height="100" :src="product.image_url" />
-                        </td>
-                        <td class="tw-px-6 tw-py-4">
-                            <Link class="tw-text-blue-500 hover:tw-underline hover:tw-text-blue-700"  :href="route('admin.products.edit', product.id)">
-                            {{ product.name }} 
-                            </Link>
-                        </td>
-                        <td class="tw-px-6 tw-py-4">
-                            {{ product.category.name }}
-                        </td>
-                        <td class="tw-px-6 tw-py-4">
-                            {{ product.stock }}
-                        </td>
-                        <td class="tw-px-6 tw-py-4">
-                            {{ numberFormatter.format(product.cost_price) }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-
-    </AuthenticatedLayout>
 </template>
