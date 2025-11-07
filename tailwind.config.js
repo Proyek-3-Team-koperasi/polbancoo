@@ -21,24 +21,15 @@ export default {
                 ]
     		},
     		colors: {
-    			primary: {
-    				DEFAULT: 'hsl(var(--primary))',
-    				foreground: 'hsl(var(--primary-foreground))'
-    			},
-    			secondary: {
-    				DEFAULT: 'hsl(var(--secondary))',
-    				foreground: 'hsl(var(--secondary-foreground))'
-    			},
-    			ternary: '#f59e0b',
-    			'primary-contrast': '#ffffff',
-    			'secondary-contrast': '#ffffff',
-    			'ternary-contrast': '#1f2937',
-    			'secondary-light': 'rgba(30, 58, 138, 0.12)',
-    			surface: '#ffffff',
-    			muted: {
-    				DEFAULT: 'hsl(var(--muted))',
-    				foreground: 'hsl(var(--muted-foreground))'
-    			},
+    			primary: "#f97316",
+                secondary: "#1e3a8a",
+                ternary: "#f59e0b",
+                "primary-contrast": "#ffffff",
+                "secondary-contrast": "#ffffff",
+                "ternary-contrast": "#1f2937",
+                "secondary-light": "rgba(30, 58, 138, 0.12)",
+                surface: "#ffffff",
+                muted: "#f8fafc",
     			background: 'hsl(var(--background))',
     			foreground: 'hsl(var(--foreground))',
     			card: {

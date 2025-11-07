@@ -32,12 +32,14 @@ class ProductsController extends Controller
         ]);
     }
 
-      public function create()
+    public function create()
     {
-        return Inertia::render('Admin/Products/Create');
+        return Inertia::render('Admin/Products/Form', [
+            'intent' => 'create',
+        ]);
     }
 
-    public function edit(Product $product)
+    public function edit()
     {
         // dd($product);
         // // Start with the base query
@@ -53,9 +55,14 @@ class ProductsController extends Controller
         // $products = $query->paginate(10)->withQueryString();
 
         // Render the Inertia page component and pass props
-        return Inertia::render('Admin/Products/Edit', [
-            'product' => $product,
+        return Inertia::render('Admin/Products/Form', [
+            // 'product' => $product,
             // 'filters' => $request->only(['search']), // Send filters back to the view
+            'intent' => 'edit',
         ]);
+    }
+
+    public function update(Request $request) {
+        dd($request);
     }
 }

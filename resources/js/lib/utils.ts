@@ -14,3 +14,9 @@ export function valueUpdater<T extends Updater<any>>(updaterOrValue: T, ref: Ref
     ? updaterOrValue(ref.value)
     : updaterOrValue
 }
+export function formatAsRupiah(value: number) {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+  }).format(value)
+}

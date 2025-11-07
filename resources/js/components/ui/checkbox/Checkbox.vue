@@ -28,14 +28,14 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
     v-bind="forwarded"
     :class="
       cn(
-        'grid place-content-center peer h-4 w-4 shrink-0 rounded-sm border border-primary shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground',
+        'tw-grid tw-place-content-center tw-peer tw-h-4 tw-w-4 tw-shrink-0 tw-rounded-sm tw-border tw-border-primary tw-shadow focus-visible:tw-outline-none focus-visible:tw-ring-1 focus-visible:tw-ring-ring disabled:tw-cursor-not-allowed disabled:tw-opacity-50 data-[state=checked]:tw-bg-primary data-[state=checked]:tw-text-primary-foreground',
         props.class,
       )
     "
   >
-    <CheckboxIndicator class="grid place-content-center text-current">
+    <CheckboxIndicator class="tw-grid tw-place-content-center tw-text-current">
       <slot>
-        <Check class="h-4 w-4" />
+        <Check class="tw-h-4 tw-w-4" />
       </slot>
     </CheckboxIndicator>
   </CheckboxRoot>

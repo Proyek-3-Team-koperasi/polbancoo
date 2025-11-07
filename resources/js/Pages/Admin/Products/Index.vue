@@ -6,6 +6,7 @@ import type {
   SortingState,
   VisibilityState,
 } from "@tanstack/vue-table"
+
 import {
   FlexRender,
   getCoreRowModel,
@@ -17,16 +18,20 @@ import {
 } from "@tanstack/vue-table"
 import { ArrowUpDown, ChevronDown } from "lucide-vue-next"
 import { h, ref } from "vue"
-// import { valueUpdater } from "@/utils"
-
+import { valueUpdater } from "@/lib/utils"
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head, Link } from "@inertiajs/vue3";
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+
 import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { Input } from "@/components/ui/input"
 import {
   Table,
@@ -36,92 +41,113 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-// import DropdownAction from "./DataTableDemoColumn.vue"
 
-export interface Payment {
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import Label from "@/components/ui/label/Label.vue"
+
+export interface Product {
   id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
+  image: string
+  name: string,
+  stock: number,
+  cost: number,
 }
 
-const data: Payment[] = [
+const data: Product[] = [
   {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
+    id: "prod_001",
+    image: "https://picsum.photos/seed/laptop/400/300",
+    name: "Laptop Pro 16 inch",
+    stock: 25,
+    cost: 21500000,
   },
   {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
+    id: "prod_002",
+    image: "https://picsum.photos/seed/keyboard/400/300",
+    name: "Mechanical Keyboard",
+    stock: 112,
+    cost: 850000,
   },
   {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
+    id: "prod_003",
+    image: "https://picsum.photos/seed/mouse/400/300",
+    name: "Wireless Optical Mouse",
+    stock: 230,
+    cost: 275000,
   },
   {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
+    id: "prod_004",
+    image: "https://picsum.photos/seed/headphones/400/300",
+    name: "Bluetooth Headphones",
+    stock: 78,
+    cost: 1200000,
   },
   {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
+    id: "prod_005",
+    image: "https://picsum.photos/seed/monitor/400/300",
+    name: "27-inch 4K Monitor",
+    stock: 41,
+    cost: 4500000,
+  },
+  {
+    id: "prod_006",
+    image: "https://picsum.photos/seed/coffeemug/400/300",
+    name: "Insulated Coffee Mug",
+    stock: 450,
+    cost: 150000,
   },
 ]
 
-const columns: ColumnDef<Payment>[] = [
+const isSheetOpen = ref(false)
+const selectedProduct = ref<Product | null>(null)
+
+// Function to open the sheet with a specific product
+function openProductDetails(product: Product) {
+  selectedProduct.value = product
+  isSheetOpen.value = true
+  console.log(product)
+}
+
+const columns: ColumnDef<Product>[] = [
   {
-    id: "select",
-    header: ({ table }) => h(Checkbox, {
-      "modelValue": table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate"),
-      "onUpdate:modelValue": value => table.toggleAllPageRowsSelected(!!value),
-      "ariaLabel": "Select all",
-    }),
-    cell: ({ row }) => h(Checkbox, {
-      "modelValue": row.getIsSelected(),
-      "onUpdate:modelValue": value => row.toggleSelected(!!value),
-      "ariaLabel": "Select row",
-    }),
-    enableSorting: false,
-    enableHiding: false,
+    accessorKey: "image",
+    header: "",
+    cell: ({ row }) => h("img", { class: "tw-h-24 tw-w-24 tw-rounded tw-object-cover", src: row.getValue("image") }),
   },
   {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("status")),
-  },
-  {
-    accessorKey: "email",
+    accessorKey: "name",
     header: ({ column }) => {
       return h(Button, {
-        variant: "ghost",
-        onClick: () => column.toggleSorting(column.getIsSorted() === "asc"),
-      }, () => ["Email", h(ArrowUpDown, { class: "ml-2 h-4 w-4" })])
+        variant: "nama",
+      }, () => ["Name", h("div", { class: "tw-ml-2 tw-h-4 tw-w-4" })])
     },
-    cell: ({ row }) => h("div", { class: "lowercase" }, row.getValue("email")),
+    cell: ({ row }) => h("div", { class: "tw-lowercase" }, row.getValue("name")),
   },
   {
-    accessorKey: "amount",
-    header: () => h("div", { class: "text-right" }, "Amount"),
+    accessorKey: "stock",
+    header: () => h("div", { class: "tw-text-right" }, "Stok"),
+    cell: ({ row }) => h("div", { class: "tw-text-right tw-font-medium" }, row.getValue("stock")),
+  },
+  {
+    accessorKey: "cost",
+    header: () => h("div", { class: "tw-text-right" }, "Harga"),
     cell: ({ row }) => {
-      const amount = Number.parseFloat(row.getValue("amount"))
+      const amount = Number.parseFloat(row.getValue("cost"))
 
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
+
+      const formatted = new Intl.NumberFormat("id-ID", {
         style: "currency",
-        currency: "USD",
+        currency: "IDR",
       }).format(amount)
 
-      return h("div", { class: "text-right font-medium" }, formatted)
+      return h("div", { class: "tw-text-right tw-font-medium" }, formatted)
     },
   },
   {
@@ -152,11 +178,11 @@ const table = useVueTable({
   getSortedRowModel: getSortedRowModel(),
   getFilteredRowModel: getFilteredRowModel(),
   getExpandedRowModel: getExpandedRowModel(),
-//   onSortingChange: updaterOrValue => valueUpdater(updaterOrValue, sorting),
-//   onColumnFiltersChange: updaterOrValue => valueUpdater(updaterOrValue, columnFilters),
-//   onColumnVisibilityChange: updaterOrValue => valueUpdater(updaterOrValue, columnVisibility),
-//   onRowSelectionChange: updaterOrValue => valueUpdater(up daterOrValue, rowSelection),
-//   onExpandedChange: updaterOrValue => valueUpdater(updaterOrValue, expanded),
+  onSortingChange: updaterOrValue => valueUpdater(updaterOrValue, sorting),
+  onColumnFiltersChange: updaterOrValue => valueUpdater(updaterOrValue, columnFilters),
+  onColumnVisibilityChange: updaterOrValue => valueUpdater(updaterOrValue, columnVisibility),
+  onRowSelectionChange: updaterOrValue => valueUpdater(updaterOrValue, rowSelection),
+  onExpandedChange: updaterOrValue => valueUpdater(updaterOrValue, expanded),
   state: {
     get sorting() { return sorting.value },
     get columnFilters() { return columnFilters.value },
@@ -168,95 +194,121 @@ const table = useVueTable({
 </script>
 
 <template>
-  <div class="w-full">
-    <div class="flex items-center py-4">
-      <Input
-        class="max-w-sm"
-        placeholder="Filter emails..."
-        :model-value="table.getColumn('email')?.getFilterValue() as string"
-        @update:model-value=" table.getColumn('email')?.setFilterValue($event)"
-      />
-      <DropdownMenu>
-        <DropdownMenuTrigger as-child>
-          <Button variant="outline" class="ml-auto">
-            Columns <ChevronDown class="ml-2 h-4 w-4" />
+
+  <Head title="Kelola Produk" />
+
+  <AuthenticatedLayout>
+
+    <template #header>
+      <h2 class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800">
+        Kelola Produk
+      </h2>
+    </template>
+
+    <div class="tw-bg-white tw-rounded-md tw-p-4">
+
+
+      <div class="tw-w-full ">
+        <div class="tw-flex tw-items-center tw-py-4 ">
+          <Input class="tw-max-w-sm" placeholder="Filter emails..."
+            :model-value="table.getColumn('name')?.getFilterValue() as string"
+            @update:model-value=" table.getColumn('name')?.setFilterValue($event)" />
+          <Button asChild class="tw-ml-auto"  >
+            <Link :href="route('admin.products.create')" >
+              Tambah Produk
+            </Link>
           </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuCheckboxItem
-            v-for="column in table.getAllColumns().filter((column) => column.getCanHide())"
-            :key="column.id"
-            class="capitalize"
-            :model-value="column.getIsVisible()"
-            @update:model-value="(value) => {
-              column.toggleVisibility(!!value)
-            }"
-          >
-            {{ column.id }}
-          </DropdownMenuCheckboxItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-    <div class="rounded-md border">
-      <Table>
-        <TableHeader>
-          <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
-            <TableHead v-for="header in headerGroup.headers" :key="header.id">
-              <FlexRender v-if="!header.isPlaceholder" :render="header.column.columnDef.header" :props="header.getContext()" />
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <template v-if="table.getRowModel().rows?.length">
-            <template v-for="row in table.getRowModel().rows" :key="row.id">
-              <TableRow :data-state="row.getIsSelected() && 'selected'">
-                <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
-                  <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
+        </div>
+        <div class="tw-rounded-md tw-border">
+
+          <Table>
+            <TableHeader>
+              <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
+                <TableHead v-for="header in headerGroup.headers" :key="header.id">
+                  <FlexRender v-if="!header.isPlaceholder" :render="header.column.columnDef.header"
+                    :props="header.getContext()" />
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <template v-if="table.getRowModel().rows?.length">
+                <template v-for="row in table.getRowModel().rows" :key="row.id">
+                  <TableRow class="tw-cursor-pointer" @click="openProductDetails(row.original)">
+                    <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
+                      <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
+
+                    </TableCell>
+                  </TableRow>
+                </template>
+              </template>
+
+              <TableRow v-else>
+                <TableCell :colspan="columns.length" class="tw-h-24 tw-text-center">
+                  No results.
                 </TableCell>
               </TableRow>
-              <TableRow v-if="row.getIsExpanded()">
-                <TableCell :colspan="row.getAllCells().length">
-                  {{ JSON.stringify(row.original) }}
-                </TableCell>
-              </TableRow>
-            </template>
-          </template>
+            </TableBody>
+          </Table>
 
-          <TableRow v-else>
-            <TableCell
-              :colspan="columns.length"
-              class="h-24 text-center"
-            >
-              No results.
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+        </div>
+
+        <div class="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4">
+          <div class="tw-space-x-2">
+            <Button variant="outline" size="sm" :disabled="!table.getCanPreviousPage()" @click="table.previousPage()">
+              Previous
+            </Button>
+            <Button variant="outline" size="sm" :disabled="!table.getCanNextPage()" @click="table.nextPage()">
+              Next
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <Dialog v-model:open="isSheetOpen">
+
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{{ selectedProduct?.name }}</DialogTitle>
+          </DialogHeader>
+
+          <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6 tw-py-4">
+            <div class="tw-flex tw-items-start tw-justify-center">
+              <img :src="selectedProduct.image" :alt="selectedProduct.name"
+                class="tw-w-full tw-max-w-md tw-rounded-md tw-object-cover tw-shadow-md" />
+            </div>
+
+            <div class="tw-flex tw-flex-col">
+              <div class="tw-flex tw-flex-col tw-gap-2">
+                <div class="tw-flex tw-flex-col">
+                  <span class="tw-text-sm">Harga</span>
+                  <span class="tw-text-lg tw-font-bold">Rp {{ selectedProduct.cost }}</span>
+                </div>
+                <div class="tw-flex tw-flex-col">
+                  <span class="tw-text-sm">Stok</span>
+                  <span class="tw-text-lg tw-font-bold">{{ selectedProduct.stock }}</span>
+                </div>
+                <div class="tw-flex tw-flex-col">
+                  <span class="tw-text-sm">Kategori</span>
+                  <span class="tw-text-lg tw-font-bold">Kategori</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter>
+
+            <Button asChild>
+              <Link :href="route('admin.products.edit', selectedProduct.id)">
+              Edit
+              </Link>
+            </Button>
+
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
 
-    <div class="flex items-center justify-end space-x-2 py-4">
-      <div class="flex-1 text-sm text-muted-foreground">
-        {{ table.getFilteredSelectedRowModel().rows.length }} of
-        {{ table.getFilteredRowModel().rows.length }} row(s) selected.
-      </div>
-      <div class="space-x-2">
-        <Button
-          variant="outline"
-          size="sm"
-          :disabled="!table.getCanPreviousPage()"
-          @click="table.previousPage()"
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          :disabled="!table.getCanNextPage()"
-          @click="table.nextPage()"
-        >
-          Next
-        </Button>
-      </div>
-    </div>
-  </div>
+
+  </AuthenticatedLayout>
+
 </template>

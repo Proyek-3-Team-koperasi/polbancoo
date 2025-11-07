@@ -22,12 +22,12 @@ const forwardedProps = useForwardProps(delegatedProps);
     v-bind="forwardedProps"
     :class="
       cn(
-        'flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent data-[state=open]:bg-accent',
+        'tw-flex tw-cursor-default tw-select-none tw-items-center tw-rounded-sm tw-px-2 tw-py-1.5 tw-text-sm tw-outline-none focus:tw-bg-accent data-[state=open]:tw-bg-accent',
         props.class,
       )
     "
   >
     <slot />
-    <ChevronRight class="ml-auto h-4 w-4" />
+    <ChevronRight class="tw-ml-auto tw-h-4 tw-w-4" />
   </DropdownMenuSubTrigger>
 </template>
