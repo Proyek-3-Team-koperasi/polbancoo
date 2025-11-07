@@ -16,7 +16,6 @@ import {
   getSortedRowModel,
   useVueTable,
 } from "@tanstack/vue-table"
-import { ArrowUpDown, ChevronDown } from "lucide-vue-next"
 import { h, ref } from "vue"
 import { valueUpdater } from "@/lib/utils"
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
@@ -42,15 +41,6 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
-import Label from "@/components/ui/label/Label.vue"
 
 export interface Product {
   id: string
@@ -210,7 +200,7 @@ const table = useVueTable({
 
       <div class="tw-w-full ">
         <div class="tw-flex tw-items-center tw-py-4 ">
-          <Input class="tw-max-w-sm" placeholder="Filter emails..."
+          <Input class="tw-max-w-sm" placeholder="Filter nama..."
             :model-value="table.getColumn('name')?.getFilterValue() as string"
             @update:model-value=" table.getColumn('name')?.setFilterValue($event)" />
           <Button asChild class="tw-ml-auto"  >
