@@ -40,6 +40,7 @@
         "tailwindcss-animate": "^1.0.7",
         "vant": "^4.8.3",
         "vee-validate": "^4.15.1",
+        "vue-sonner": "^2.0.9",
         "zod": "^3.25.76"
     }
 }

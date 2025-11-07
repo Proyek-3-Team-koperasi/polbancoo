@@ -37,6 +37,10 @@ class HandleInertiaRequests extends Middleware
                 'user' => $user?->loadMissing('roles:id,name'),
                 'roles' => $user ? $user->roles->pluck('name') : [],
             ],
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
+                'error'   => fn () => $request->session()->get('error'),
+            ]
         ];
     }
 }

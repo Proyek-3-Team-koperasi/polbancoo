@@ -28,7 +28,7 @@ class ProductCategoriesController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        return redirect()->back()->with('success', 'Kategori berhasil ditambahkan.');
     }
 
     public function edit(): Response
@@ -40,6 +40,7 @@ class ProductCategoriesController extends Controller
 
     public function update(Request $request)
     {
-        dd($request);
+        // dd($request);
+        return redirect()->back()->with('success', 'Kategori berhasil diperbarui.');
     }
 }

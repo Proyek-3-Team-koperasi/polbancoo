@@ -10,6 +10,8 @@ import MemberBottomNav from "@/Components/navigation/MemberBottomNav.vue";
 import MemberMobileSearchBar from "@/Components/navigation/MemberMobileSearchBar.vue";
 import MemberMobileTopBar from "@/Components/navigation/MemberMobileTopBar.vue";
 import CartIcon from "@/Components/CartIcon.vue";
+import { toast, Toaster } from "vue-sonner";
+import 'vue-sonner/style.css'
 
 const page = usePage();
 
@@ -172,6 +174,7 @@ const memberActiveIndex = computed(() => {
     return index >= 0 ? index : 0;
 });
 
+
 const navigateMember = (index) => {
     const target = currentMemberLinks.value[index];
 
@@ -186,9 +189,21 @@ watch(
         sidebarOpen.value = false;
     },
 );
+
+watch(
+    () => page.props.flash?.success,
+    (msg) => {
+        if (msg) {
+            toast.success(msg, {
+                id: new Date().getTime()
+            });
+        }
+    }
+)
 </script>
 
 <template :currentTitle="curTitle">
+    <Toaster richColors />
     <div class="tw-min-h-screen tw-bg-gray-100">
         <div v-if="isAdminLike" class="tw-flex tw-min-h-screen">
             <AdminSidebar

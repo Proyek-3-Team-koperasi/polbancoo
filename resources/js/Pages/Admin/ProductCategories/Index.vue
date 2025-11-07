@@ -21,7 +21,7 @@ import { valueUpdater } from "@/lib/utils"
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, Link, Form } from "@inertiajs/vue3";
 import { Button } from "@/components/ui/button"
-
+import { toast } from 'vue-sonner'
 import {
     Dialog,
     DialogContent,
@@ -40,6 +40,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { Label } from "@/components/ui/label";
 
 
 export interface Category {
@@ -83,6 +84,12 @@ function openEditProduct(category: Category) {
     selectedCategory.value = category
     isDialogOpen.value = true
     isEdit.value = true
+    
+}
+
+function closeDialog() {
+    isDialogOpen.value = false
+    selectedCategory.value = null
 }
 
 function openAddProduct() {
@@ -161,7 +168,7 @@ const table = useVueTable({
                         :model-value="table.getColumn('name')?.getFilterValue() as string"
                         @update:model-value=" table.getColumn('name')?.setFilterValue($event)" />
                     
-                            <Button @click="openAddProduct" type="submit" class="tw-ml-auto" >
+                            <Button @click="openAddProduct"  class="tw-ml-auto" >
                                 Tambah Kategori
                             </Button>
                 </div>
@@ -222,7 +229,7 @@ const table = useVueTable({
                     <Form :action=" isEdit ? 
                         route('admin.product-categories.update', selectedCategory.id): 
                         route('admin.product-categories.store')" 
-                        :method="isEdit ? 'PUT' : 'POST'" >
+                        :method="isEdit ? 'PUT' : 'POST'" @submit-complete="isDialogOpen = false" >
 
                         <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6 tw-py-4">
 
