@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import { router, usePage, Link } from "@inertiajs/vue3";
 import { Settings } from "lucide-vue-next";
 
@@ -194,11 +194,15 @@ watch(
     () => page.props.flash?.success,
     (msg) => {
         if (msg) {
-            toast.success(msg, {
-                id: new Date().getTime()
-            });
+            console.log(msg)
+            nextTick(() => {
+                toast.success(msg, {
+                    id: new Date().getTime()
+                });
+            })
         }
-    }
+    },
+    {immediate: true}
 )
 </script>
 
