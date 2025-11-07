@@ -41,7 +41,6 @@ Route::prefix('admin')
     ->middleware(['auth', 'verified', 'role:Admin,Super Admin'])
     ->group(function () {
         Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
-        Route::get('/members', [MembersController::class, 'index'])->name('members.index');
         Route::get('/product-categories', ProductCategoriesController::class)->name('product-categories.index');
         Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
         Route::get('/transactions', TransactionsController::class)->name('transactions.index');
@@ -50,6 +49,15 @@ Route::prefix('admin')
         Route::get('/shu', ShuController::class)->name('shu.index');
         Route::get('/approvals', [ApprovalsController::class, 'index'])->name('approvals');
         Route::get('/ledger', [LedgerController::class, 'index'])->name('ledger');
+        Route::resource('members', MembersController::class)->names([
+            'index' => 'members.index',
+            'create' => 'members.create',
+            'store' => 'members.store',
+            'show' => 'members.show',
+            'edit' => 'members.edit',
+            'update' => 'members.update',
+            'destroy' => 'members.destroy',
+        ]);
     });
 
 Route::prefix('member')
