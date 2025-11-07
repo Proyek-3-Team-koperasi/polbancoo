@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { ImagePreview } from "vant";
+import { ImagePreview, showImagePreview } from "vant";
 import { ref } from "vue";
 
     const transactions = ref([
@@ -10,47 +10,47 @@ import { ref } from "vue";
         jenis: "Pokok",
         tanggal: "10 September 2025",
         nominal: 99000,
-        bukti: "/storage/img/bukti_transfer/sample1.jpg",
+        bukti: "/storage/img/bukti_transfer/test1.png",
     },
     {
         nama: "Member Demo",
         jenis: "Wajib",
         tanggal: "19 September 2025",
         nominal: 199000,
-        bukti: "/storage/img/bukti_transfer/sample2.jpg",
+        bukti: "/storage/img/bukti_transfer/test1.png",
     },
     {
         nama: "Member Demo",
         jenis: "Pokok",
         tanggal: "10 September 2025",
         nominal: 799000,
-        bukti: "/storage/img/bukti_transfer/sample1.jpg",
+        bukti: "/storage/img/bukti_transfer/test1.png",
     },
     {
         nama: "Member Demo",
         jenis: "Wajib",
         tanggal: "19 September 2025",
         nominal: 100000,
-        bukti: "/storage/img/bukti_transfer/sample2.jpg",
+        bukti: "/storage/img/bukti_transfer/test1.png",
     },
     {
         nama: "Member Demo",
         jenis: "Pokok",
         tanggal: "10 September 2025",
         nominal: 150000,
-        bukti: "/storage/img/bukti_transfer/sample1.jpg",
+        bukti: "/storage/img/bukti_transfer/test1.png",
     },
     {
         nama: "Member Demo",
         jenis: "Wajib",
         tanggal: "19 September 2025",
         nominal: 9999999999,
-        bukti: "/storage/img/bukti_transfer/sample2.jpg",
+        bukti: "/storage/img/bukti_transfer/test1.png",
     },
     ]);
 
     function previewImage(src) {
-    ImagePreview([src]);
+    showImagePreview([src])
     }
 </script>
 
