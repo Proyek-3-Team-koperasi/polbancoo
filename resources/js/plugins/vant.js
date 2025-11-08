@@ -18,6 +18,7 @@ import {
     RadioGroup,
     Stepper,
     Toast,
+    Dialog,
     Search,
     DropdownMenu,
     DropdownItem,
@@ -46,10 +47,11 @@ export function registerVant(app) {
     app.use(RadioGroup);
     app.use(Stepper);
     app.use(Toast);
-    app.use(Search)
-    app.use(DropdownMenu)
-    app.use(DropdownItem)
-    app.use(Pagination)
+    app.use(Dialog);
+    app.use(Search);
+    app.use(DropdownMenu);
+    app.use(DropdownItem);
+    app.use(Pagination);
     app.use(Checkbox);
     app.use(CheckboxGroup);
 }

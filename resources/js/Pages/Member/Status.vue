@@ -228,7 +228,6 @@ const goToDetail = (id) => {
                             >
                                 <button
                                     v-for="opt in [
-                                        'Approved',
                                         'Pending',
                                         'Rejected',
                                         'Active',

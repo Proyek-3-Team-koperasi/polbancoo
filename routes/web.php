@@ -43,7 +43,8 @@ Route::prefix('admin')
         Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
         Route::get('/product-categories', ProductCategoriesController::class)->name('product-categories.index');
         Route::resource('/products', ProductsController::class);
-        Route::get('/transactions', TransactionsController::class)->name('transactions.index');
+        Route::get('/transactions', [TransactionsController::class, 'index'])->name('transactions.index');
+        Route::post('/transactions/{id}/verify', [TransactionsController::class, 'verify'])->name('transactions.verify');
         Route::get('/installments', InstallmentsController::class)->name('installments.index');
         Route::get('/savings', SavingsController::class)->name('savings.index');
         Route::get('/shu', ShuController::class)->name('shu.index');

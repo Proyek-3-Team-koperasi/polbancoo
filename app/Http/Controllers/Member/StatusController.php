@@ -30,21 +30,21 @@ class StatusController extends Controller
         // Filter Berdasarkan Status
         if ($request->status_filter) {
             if ($request->status_filter === 'Tunai') {
-                // cuman tampilin pengajuan tunai yang udah lunas
+                // Tampilkan transaksi tunai (tanpa tenor) yang sudah lunas
                 $query->where('status', 'Lunas')
                     ->where(function ($q) {
                         $q->whereNull('tenor')->orWhere('tenor', 0);
                     });
             } elseif ($request->status_filter === 'Cicilan') {
-                // tampilin semua pengajuan cicilan (ada tenor)
+                // Tampilkan transaksi cicilan (ada tenor)
                 $query->whereNotNull('tenor')
-                    ->whereIn('status', ['Approved', 'Pending', 'Rejected', 'Active', 'Lunas']);
+                    ->whereIn('status', ['Pending', 'Active', 'Rejected', 'Lunas']);
             } else {
                 $query->where('status', $request->status_filter);
             }
         }
 
-        // Filter Berdasarkan Total Harga
+        // Urutkan Berdasarkan Total Harga
         if ($request->sort_price === 'highest') {
             $query->orderBy('selling_price_total', 'desc');
         } elseif ($request->sort_price === 'lowest') {
@@ -61,18 +61,6 @@ class StatusController extends Controller
             'approval_date'
         ]);
 
-        // Auto update status approved jadi active setelah 3 hari
-        foreach ($applications as $app) {
-            if (
-                $app->status === 'Approved' &&
-                $app->approval_date &&
-                Carbon::parse($app->approval_date)->addDays(3)->isPast()
-            ) {
-                $app->status = 'Active';
-                $app->save();
-            }
-        }
-
         return Inertia::render('Member/Status', [
             'applications' => $applications,
             'filters' => [
@@ -83,11 +71,11 @@ class StatusController extends Controller
         ]);
     }
 
-    // 🔶 Halaman detail transaksi
+    // Halaman detail transaksi
     public function show($id): Response
     {
         $transaction = FinancingApplication::with('order')
-            ->where('member_user_id', Auth::id()) // biar anggota cuma bisa lihat punya sendiri aja
+            ->where('member_user_id', Auth::id())
             ->findOrFail($id);
 
         return Inertia::render('Member/TransactionDetail', [
