@@ -8,9 +8,14 @@ use Inertia\Response;
 
 class InstallmentsController extends Controller
 {
-    public function __invoke(): Response
+    public function index(): Response
     {
         return Inertia::render('Admin/Installments/Index');
+    }
+
+    public function show(): Response
+    {
+        return Inertia::render('Admin/Installments/Detail');
     }
 }
 

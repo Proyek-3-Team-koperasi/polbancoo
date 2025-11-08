@@ -52,7 +52,7 @@ Route::prefix('admin')
         Route::resource('/products', ProductsController::class);
         Route::get('/transactions', [TransactionsController::class, 'index'])->name('transactions.index');
         Route::post('/transactions/{id}/verify', [TransactionsController::class, 'verify'])->name('transactions.verify');
-        Route::get('/installments', InstallmentsController::class)->name('installments.index');
+        Route::resource('/installments', InstallmentsController::class);
         Route::get('/savings', SavingsController::class)->name('savings.index');
         Route::get('/shu', ShuController::class)->name('shu.index');
         Route::get('/approvals', [ApprovalsController::class, 'index'])->name('approvals');
