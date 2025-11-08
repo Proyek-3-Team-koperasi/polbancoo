@@ -22,7 +22,10 @@ export default {
     		},
     		colors: {
     			primary: "#f97316",
-                secondary: "#1e3a8a",
+                secondary: {
+					DEFAULT: "#1e3a8a",
+					foreground: "#ffffff"
+				},
                 ternary: "#f59e0b",
                 "primary-contrast": "#ffffff",
                 "secondary-contrast": "#ffffff",
@@ -41,8 +44,8 @@ export default {
     				foreground: 'hsl(var(--popover-foreground))'
     			},
     			accent: {
-    				DEFAULT: 'hsl(var(--accent))',
-    				foreground: 'hsl(var(--accent-foreground))'
+    				DEFAULT: 'hsl(158, 82%, 40%);',
+    				foreground: '#ffffff'
     			},
     			destructive: {
     				DEFAULT: 'hsl(var(--destructive))',

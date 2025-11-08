@@ -54,7 +54,8 @@ Route::prefix('admin')
         Route::post('/transactions/{id}/verify', [TransactionsController::class, 'verify'])->name('transactions.verify');
         Route::resource('/installments', InstallmentsController::class);
         Route::get('/savings', SavingsController::class)->name('savings.index');
-        Route::get('/shu', ShuController::class)->name('shu.index');
+        Route::get('/shu', [ShuController::class, 'index'])->name('shu.index');
+        Route::get('/shu/kalkulator', [ShuController::class, 'calculateKeuntungan'])->name('shu.kalkulator');
         Route::get('/approvals', [ApprovalsController::class, 'index'])->name('approvals');
         Route::get('/ledger', [LedgerController::class, 'index'])->name('ledger');
         Route::resource('members', MembersController::class)->names([

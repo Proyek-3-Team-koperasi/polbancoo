@@ -11,12 +11,13 @@ import {
 const props = defineProps({
     title: { type: String, required: true },
     description: { type: String, default: "" },
+
     
 })
 
 </script>
 <template>
-      <Card>
+      <Card class="tw-h-full" >
                     <CardHeader>
                         <CardTitle>
                             <div class="tw-flex tw-justify-between tw-items-center" >
