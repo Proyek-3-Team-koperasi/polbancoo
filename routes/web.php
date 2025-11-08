@@ -19,6 +19,7 @@ use App\Http\Controllers\Member\CheckoutController;
 use App\Http\Controllers\Member\CheckoutCreditController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
 use App\Http\Controllers\Member\FinancesController;
+use App\Http\Controllers\Member\ProductsController as MemberProductsController;
 // Super Admin Controllers
 use App\Http\Controllers\Member\StatusController;
 use App\Http\Controllers\ProfileController;
@@ -84,8 +85,8 @@ Route::prefix('member')
         Route::match(['get', 'post'], '/checkout/credit', CheckoutCreditController::class)->name('checkout.credit');
         Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
         Route::get('/status/{id}', [StatusController::class, 'show'])->name('status.show');
-        Route::get('/products', [ProductsController::class, 'index'])->name('products');
-        Route::get('/products/{product:slug}', [\App\Http\Controllers\Member\ProductsController::class, 'show'])->name('products.show');
+        Route::get('/products', [MemberProductsController::class, 'index'])->name('products');
+        Route::get('/products/{product:slug}', [MemberProductsController::class, 'show'])->name('products.show');
         Route::get('/profile', \App\Http\Controllers\Member\ProfileController::class)->name('profile');
         Route::post('/profile/upload-avatar', [\App\Http\Controllers\Member\ProfileController::class, 'uploadAvatar'])->name('profile.upload.avatar');
     });
