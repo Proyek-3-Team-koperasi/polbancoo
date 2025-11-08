@@ -20,3 +20,8 @@ export function formatAsRupiah(value: number) {
     currency: 'IDR',
   }).format(value)
 }
+
+export function dateSubtractDay(date: Date, days: number) {
+  date.setDate(date.getDate() - days)
+  return date
+}
