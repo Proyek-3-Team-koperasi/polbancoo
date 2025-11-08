@@ -14,6 +14,7 @@ const props = defineProps({
                 id: 1,
                 name: "lorem ipsum dolor sit amet consectetur adipisicing elit",
                 price: 100000,
+                marginCredits: 10000,
                 quantity: 222,
                 imageUrl:
                     "https://images.unsplash.com/photo-1630563451961-ac2ff27616ab?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687",
@@ -23,6 +24,7 @@ const props = defineProps({
                 name: "Produk B",
                 price: 150000,
                 quantity: 1,
+                marginCredits: 20000,
                 imageUrl:
                     "https://images.unsplash.com/photo-1503602642458-232111445657?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687",
             },
@@ -90,8 +92,16 @@ function proceedToPayment() {
         return;
     }
 
+    const payload = {
+        cartItems: props.cartItems.map((item) => ({ ...item })),
+        pointsPerRupiah: props.PointsPerRupiah,
+        estimatedPoints: calculatePoints(),
+        totalAmount: calculateTotalAmount(),
+        paymentMethod: selectedMethod,
+    };
+
     isNavigating.value = true;
-    router.visit(destination(), {
+    router.post(destination(), payload, {
         onFinish: () => {
             isNavigating.value = false;
         },
@@ -130,7 +140,10 @@ function proceedToPayment() {
                                 <div
                                     class="tw-font-semibold tw-flex tw-flex-col tw-w-16 md:tw-w-96"
                                 >
-                                    <span>{{ item.name }}</span>
+                                    <span
+                                        class="tw-block tw-truncate tw-max-w-full"
+                                        >{{ item.name }}</span
+                                    >
                                     <span
                                         class="tw-text-gray-500 tw-text-[0.7rem] md:tw-text-xs"
                                     >
