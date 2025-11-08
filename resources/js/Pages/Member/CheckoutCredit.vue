@@ -29,6 +29,7 @@ const props = defineProps({
 
 const tenorShortcuts = [1, 3, 6, 12];
 const tenor = ref("");
+const supportingDocs = ref([]);
 
 const marginStates = ref([]);
 
@@ -197,6 +198,11 @@ function formatNumberWithDots(value) {
     const numeric = Number(value) || 0;
     return numeric.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
+
+function handleSupportingDocs(event) {
+    const files = Array.from(event.target.files || []);
+    supportingDocs.value = files.slice(0, 5);
+}
 </script>
 
 <template>
@@ -207,7 +213,9 @@ function formatNumberWithDots(value) {
             class="tw-max-w-3xl tw-mx-auto tw-my-10 tw-bg-white tw-rounded-xl tw-shadow-xs tw-p-6 tw-space-y-6 md:tw-max-w-5xl md:tw-rounded-3xl md:tw-shadow-md md:tw-p-10 md:tw-space-y-10"
         >
             <div>
-                <p class="tw-text-xs tw-uppercase tw-text-gray-500 md:tw-text-sm">
+                <p
+                    class="tw-text-xs tw-uppercase tw-text-gray-500 md:tw-text-sm"
+                >
                     Metode Dipilih
                 </p>
                 <h1 class="tw-text-2xl tw-font-semibold md:tw-text-3xl">
@@ -237,14 +245,20 @@ function formatNumberWithDots(value) {
                         <div
                             class="tw-flex tw-flex-col tw-gap-1 md:tw-col-span-5 md:tw-gap-2"
                         >
-                            <p class="tw-font-semibold tw-text-sm tw-truncate md:tw-text-base">
+                            <p
+                                class="tw-font-semibold tw-text-sm tw-truncate md:tw-text-base"
+                            >
                                 {{ item.name }}
                             </p>
-                            <p class="tw-text-xs tw-text-gray-500 md:tw-text-sm">
+                            <p
+                                class="tw-text-xs tw-text-gray-500 md:tw-text-sm"
+                            >
                                 {{ item.quantity ?? 1 }} x
                                 {{ formatCurrency(item.price) }}
                             </p>
-                            <p class="tw-font-semibold tw-text-xs md:tw-text-sm">
+                            <p
+                                class="tw-font-semibold tw-text-xs md:tw-text-sm"
+                            >
                                 Total Produk:
                                 {{
                                     formatCurrency(
@@ -258,7 +272,9 @@ function formatNumberWithDots(value) {
                             v-if="marginStates[index]"
                             class="tw-rounded-xl tw-bg-orange-50 tw-p-3 tw-space-y-2 md:tw-col-span-7 md:tw-p-4"
                         >
-                            <div class="tw-flex tw-justify-between tw-text-xs md:tw-text-sm">
+                            <div
+                                class="tw-flex tw-justify-between tw-text-xs md:tw-text-sm"
+                            >
                                 <span class="tw-font-semibold"
                                     >Margin Kredit Produk</span
                                 >
@@ -272,7 +288,9 @@ function formatNumberWithDots(value) {
                                     Reset default
                                 </button>
                             </div>
-                            <p class="tw-text-xs tw-text-gray-500 md:tw-text-sm">
+                            <p
+                                class="tw-text-xs tw-text-gray-500 md:tw-text-sm"
+                            >
                                 Default:
                                 {{
                                     formatCurrency(
@@ -322,7 +340,9 @@ function formatNumberWithDots(value) {
                 </div>
             </section>
 
-            <div class="tw-grid tw-gap-4 md:tw-grid-cols-2 tw-items-start md:tw-gap-6">
+            <div
+                class="tw-grid tw-gap-4 md:tw-grid-cols-2 tw-items-start md:tw-gap-6"
+            >
                 <section
                     class="tw-space-y-2 tw-border tw-rounded-2xl tw-p-4 tw-bg-white tw-shadow-xs md:tw-h-full md:tw-p-6 md:tw-space-y-3"
                 >
@@ -381,13 +401,17 @@ function formatNumberWithDots(value) {
                             {{ formatCurrency(totalPembiayaan) }}
                         </span>
                     </div>
-                    <div class="tw-flex tw-justify-between tw-text-xs md:tw-text-sm">
+                    <div
+                        class="tw-flex tw-justify-between tw-text-xs md:tw-text-sm"
+                    >
                         <span>Margin Final</span>
                         <span class="tw-font-semibold">
                             {{ formatCurrency(totalMargin) }}
                         </span>
                     </div>
-                    <div class="tw-flex tw-justify-between tw-text-xs md:tw-text-sm">
+                    <div
+                        class="tw-flex tw-justify-between tw-text-xs md:tw-text-sm"
+                    >
                         <span>Total + Margin</span>
                         <span class="tw-font-semibold">
                             {{ formatCurrency(totalDenganMargin) }}
@@ -409,19 +433,25 @@ function formatNumberWithDots(value) {
                         </p>
                     </div>
                     <div class="tw-text-xs md:tw-text-sm">
-                        <div class="tw-flex tw-justify-between md:tw-items-center">
+                        <div
+                            class="tw-flex tw-justify-between md:tw-items-center"
+                        >
                             <span>Tagihan diterbitkan</span>
                             <span class="tw-font-semibold">{{
                                 invoiceDateLabel
                             }}</span>
                         </div>
-                        <div class="tw-flex tw-justify-between md:tw-items-center">
+                        <div
+                            class="tw-flex tw-justify-between md:tw-items-center"
+                        >
                             <span>Pembayaran pertama</span>
                             <span class="tw-font-semibold">
                                 {{ firstPaymentDateLabel }}
                             </span>
                         </div>
-                        <div class="tw-flex tw-justify-between md:tw-items-center">
+                        <div
+                            class="tw-flex tw-justify-between md:tw-items-center"
+                        >
                             <span>Pembayaran terakhir</span>
                             <span
                                 class="tw-font-semibold"
@@ -444,6 +474,55 @@ function formatNumberWithDots(value) {
                     </div>
                 </section>
             </div>
+
+            <section class="tw-space-y-3 md:tw-space-y-4">
+                <div>
+                    <h3 class="tw-text-base tw-font-semibold md:tw-text-lg">
+                        Dokumen Pendukung (Opsional)
+                    </h3>
+                    <p class="tw-text-xs tw-text-gray-500 md:tw-text-sm">
+                        Tambahkan rekening koran atau slip gaji untuk
+                        mempercepat proses verifikasi. Maksimal 5 file.
+                    </p>
+                </div>
+                <label
+                    class="tw-flex tw-items-center tw-justify-between tw-border tw-rounded-2xl tw-px-4 tw-py-3 tw-cursor-pointer tw-transition tw-bg-primary/5 tw-border-primary/40 hover:tw-bg-primary/10 tw-gap-3 tw-flex-wrap md:tw-flex-nowrap md:tw-px-6 md:tw-py-4"
+                >
+                    <div class="tw-flex tw-flex-col tw-flex-1">
+                        <span
+                            class="tw-text-sm tw-font-semibold tw-text-primary md:tw-text-base"
+                        >
+                            Drop atau pilih dokumen pendukung
+                        </span>
+                    </div>
+                    <span class="tw-flex tw-items-center tw-gap-2 md:tw-gap-3">
+                        <span
+                            class="tw-text-xs tw-font-semibold tw-text-primary tw-uppercase tw-border tw-border-primary tw-rounded-md tw-px-3 tw-py-1 md:tw-text-sm md:tw-px-4 md:tw-py-1.5"
+                        >
+                            Browse
+                        </span>
+                    </span>
+                    <input
+                        type="file"
+                        accept="image/*,application/pdf"
+                        multiple
+                        class="tw-hidden"
+                        @change="handleSupportingDocs"
+                    />
+                </label>
+                <div v-if="supportingDocs.length" class="tw-space-y-1">
+                    <p class="tw-text-xs tw-text-gray-500 md:tw-text-sm">
+                        File terpilih:
+                    </p>
+                    <ul
+                        class="tw-text-xs tw-text-green-600 tw-font-medium md:tw-text-sm tw-list-disc tw-list-inside tw-space-y-1"
+                    >
+                        <li v-for="doc in supportingDocs" :key="doc.name">
+                            {{ doc.name }}
+                        </li>
+                    </ul>
+                </div>
+            </section>
 
             <div class="tw-flex tw-justify-between tw-gap-3">
                 <button

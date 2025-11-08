@@ -173,11 +173,24 @@ function goBackToCheckout() {
                     >
                         <input
                             type="radio"
-                            class="tw-mt-1"
+                            class="tw-sr-only"
                             :value="account.value"
                             v-model="selectedAccount"
                             name="rekening"
                         />
+                        <span
+                            class="tw-flex tw-items-center tw-justify-center tw-w-5 tw-h-5 tw-rounded-full tw-border tw-transition"
+                            :class="
+                                selectedAccount === account.value
+                                    ? 'tw-border-primary tw-bg-primary/10 tw-ring-2 tw-ring-primary/40'
+                                    : 'tw-border-gray-300 tw-bg-white'
+                            "
+                        >
+                            <span
+                                v-if="selectedAccount === account.value"
+                                class="tw-w-2 tw-h-2 tw-rounded-full tw-bg-primary"
+                            ></span>
+                        </span>
                         <div class="tw-flex-1">
                             <p
                                 class="tw-font-semibold tw-text-sm md:tw-text-base"
@@ -232,11 +245,6 @@ function goBackToCheckout() {
                     File terpilih: {{ buktiTransfer.name }}
                 </p>
             </section>
-
-            <p class="tw-text-sm tw-text-gray-600 md:tw-text-base">
-                Silakan unggah bukti transfer Anda, lalu serahkan ringkasan ini
-                ke loket koperasi untuk verifikasi terakhir.
-            </p>
 
             <div class="tw-flex tw-justify-between tw-gap-3 md:tw-gap-5">
                 <button
