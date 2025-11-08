@@ -27,6 +27,15 @@ defineProps({
                         </Link>
                     </div>
 
+                    <div class="tw-mb-4">
+                        <input
+                            v-model="search"
+                            @input="submit"
+                            placeholder="Cari anggota..."
+                            class="tw-w-full tw-p-2 tw-border tw-rounded"
+                        />
+                    </div>
+
                     <div class="tw-overflow-x-auto">
                         <table class="tw-min-w-full tw-bg-white tw-border tw-border-gray-200">
                             <thead>

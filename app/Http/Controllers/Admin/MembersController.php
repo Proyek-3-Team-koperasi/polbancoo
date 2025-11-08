@@ -67,58 +67,12 @@ class MembersController extends Controller
     public function show(string $id): Response
     {
         // Data dummy untuk detail anggota
-        $member = [
-            'id' => (int)$id,
-            'name' => 'Andi',
-            'member_id_number' => '1234567890',
-            'faculty_or_unit' => 'Teknik Informatika',
-            'address' => 'Jl. Contoh No. 123, Kota, Provinsi',
-            'phone_number' => '+62 812-3456-7890',
-            'total_savings' => [
-                'wajib' => 500000,
-                'pokok' => 100000,
-                'sukarela' => 250000,
-                'total' => 850000,
-            ],
-            'savings_history' => [
-                [
-                    'date' => '2025-01-15',
-                    'type' => 'Wajib',
-                    'amount' => 100000,
-                    'description' => 'Simpanan wajib bulan Januari',
-                ],
-                [
-                    'date' => '2025-01-10',
-                    'type' => 'Pokok',
-                    'amount' => 100000,
-                    'description' => 'Simpanan pokok awal',
-                ],
-                [
-                    'date' => '2025-01-05',
-                    'type' => 'Sukarela',
-                    'amount' => 250000,
-                    'description' => 'Simpanan sukarela',
-                ],
-                [
-                    'date' => '2024-12-20',
-                    'type' => 'Wajib',
-                    'amount' => 100000,
-                    'description' => 'Simpanan wajib bulan Desember',
-                ],
-                [
-                    'date' => '2024-11-15',
-                    'type' => 'Wajib',
-                    'amount' => 100000,
-                    'description' => 'Simpanan wajib bulan November',
-                ],
-            ],
-        ];
-
         $member = collect([
             [
                 'id' => 1,
                 'name' => 'Andi',
-                'member_id_number' => '1234567890',
+                'email' => 'andi@example.com',
+                'member_id' => '1234567890',
                 'faculty_or_unit' => 'Teknik Informatika',
                 'address' => 'Jl. Contoh No. 123, Kota, Provinsi',
                 'phone_number' => '+62 812-3456-7890',
@@ -164,7 +118,8 @@ class MembersController extends Controller
             [
                 'id' => 2,
                 'name' => 'Arief',
-                'member_id_number' => '0987654321',
+                'email' => 'arief@example.com',
+                'member_id' => '0987654321',
                 'faculty_or_unit' => 'Manajemen',
                 'address' => 'Jl. Contoh No. 456, Kota, Provinsi',
                 'phone_number' => '+62 813-9876-5432',
@@ -198,7 +153,8 @@ class MembersController extends Controller
             [
                 'id' => 3,
                 'name' => 'Arnold',
-                'member_id_number' => '1122334455',
+                'email' => 'arnold@example.com',
+                'member_id' => '1122334455',
                 'faculty_or_unit' => 'Teknik Mesin',
                 'address' => 'Jl. Contoh No. 789, Kota, Provinsi',
                 'phone_number' => '+62 814-1122-3344',
@@ -253,6 +209,8 @@ class MembersController extends Controller
                 'email' => 'andi@example.com',
                 'member_id' => '1234567890',
                 'faculty_or_unit' => 'Teknik Informatika',
+                'address' => 'Jl. Contoh No. 123, Kota, Provinsi',
+                'phone_number' => '+62 812-3456-7890',
             ],
             [
                 'id' => 2,
@@ -260,6 +218,8 @@ class MembersController extends Controller
                 'email' => 'arief@example.com',
                 'member_id' => '0987654321',
                 'faculty_or_unit' => 'Teknik Sipil',
+                'address' => 'Jl. Contoh No. 456, Kota, Provinsi',
+                'phone_number' => '+62 813-9876-5432',
             ],
             [
                 'id' => 3,
@@ -267,6 +227,8 @@ class MembersController extends Controller
                 'email' => 'arnold@example.com',
                 'member_id' => '1122334455',
                 'faculty_or_unit' => 'Teknik Mesin',
+                'address' => 'Jl. Contoh No. 789, Kota, Provinsi',
+                'phone_number' => '+62 814-1122-3344',
             ],
         ]);
 
