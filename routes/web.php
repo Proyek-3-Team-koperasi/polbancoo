@@ -41,7 +41,7 @@ Route::prefix('admin')
     ->middleware(['auth', 'verified', 'role:Admin,Super Admin'])
     ->group(function () {
         Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
-        Route::get('/product-categories', ProductCategoriesController::class)->name('product-categories.index');
+        Route::resource('/product-categories', ProductCategoriesController::class);
         Route::resource('/products', ProductsController::class);
         Route::get('/transactions', [TransactionsController::class, 'index'])->name('transactions.index');
         Route::post('/transactions/{id}/verify', [TransactionsController::class, 'verify'])->name('transactions.verify');

@@ -29,7 +29,7 @@ defineProps({
 
                         <div class="tw-flex-1">
                             <h3 class="tw-text-lg tw-font-semibold tw-text-gray-800">{{ member.name }}</h3>
-                            <p class="tw-text-gray-600">NIM/NIDN/NIP: {{ member.member_id_number }}</p>
+                            <p class="tw-text-gray-600">{{ member.email }}</p>
                         </div>
                     </div>
 
@@ -37,6 +37,7 @@ defineProps({
                         <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
                             <h4 class="tw-text-md tw-font-semibold tw-text-gray-700 tw-mb-2">Informasi Pribadi</h4>
                             <div class="tw-space-y-2">
+                                <p><span class="tw-font-medium tw-text-gray-600">NIM/NIDN/NIP:</span> {{ member.member_id }}</p>
                                 <p><span class="tw-font-medium tw-text-gray-600">Fakultas/Unit Kerja:</span> {{ member.faculty_or_unit }}</p>
                                 <p><span class="tw-font-medium tw-text-gray-600">Alamat:</span> {{ member.address }}</p>
                                 <p><span class="tw-font-medium tw-text-gray-600">Nomor Telepon:</span> {{ member.phone_number }}</p>

@@ -39,6 +39,11 @@ class ProductsController extends Controller
         ]);
     }
 
+    public function store(Request $request) {
+        // dd($request);
+        return redirect(route('admin.products.index'))->with('success', 'Produk berhasil ditambahkan.');
+    }
+
     public function edit()
     {
         // dd($product);
@@ -63,6 +68,8 @@ class ProductsController extends Controller
     }
 
     public function update(Request $request) {
-        dd($request);
+        // dd($request);
+        return redirect(route('admin.products.index'))->with('success', 'Produk berhasil diperbarui.');
+        // return redirect()->back()->with('success', 'Produk berhasil diperbarui.');
     }
 }

@@ -8,6 +8,8 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createApp, h } from "vue";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import { registerVant } from "./plugins/vant";
+import { Toaster } from "vue-sonner";
+import vue from "@heroicons/vue";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -23,6 +25,8 @@ createInertiaApp({
 
         vueApp.use(plugin);
         vueApp.use(ZiggyVue);
+        
+        
         registerVant(vueApp);
 
         return vueApp.mount(el);

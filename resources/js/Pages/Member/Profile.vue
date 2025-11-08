@@ -178,11 +178,7 @@ const triggerUploadModal = () => {
 
         <div class="tw-py-12">
             <div class="tw-mx-auto tw-max-w-3xl sm:tw-px-6 lg:tw-px-8">
-                <!-- Kotak Utama dengan background sedikit lebih gelap -->
-                <div
-                    class="tw-bg-gray-50 tw-shadow-lg tw-rounded-xl tw-p-6 tw-border tw-border-gray-200"
-                >
-                    <!-- Header Profil dengan warna oranye seperti di referensi -->
+                <div class="tw-bg-gray-50 tw-shadow-lg tw-rounded-xl tw-p-6 tw-border tw-border-gray-200">
                     <div
                         class="tw-bg-gradient-to-r tw-from-orange-500 tw-to-orange-400 tw-rounded-2xl tw-w-full tw-text-white tw-p-6 tw-shadow-lg tw-mb-6"
                     >
@@ -235,17 +231,19 @@ const triggerUploadModal = () => {
                         </div>
                     </div>
 
-                    <!-- Fitur-fitur -->
+                    <!-- Fitur-Fitur -->
                     <div
                         class="tw-bg-white tw-shadow-sm tw-rounded-lg tw-p-6 tw-mb-6"
                     >
-                        <div class="tw-grid tw-grid-cols-3 tw-gap-4">
+                        <div
+                            class="tw-grid tw-grid-cols-2 md:tw-grid-cols-3 tw-gap-4"
+                        >
                             <Link
                                 v-for="action in profileActions"
                                 :key="action.label"
                                 :href="action.href || undefined"
                                 :aria-disabled="!!action.comingSoon"
-                                class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-1 tw-rounded-xl tw-p-3 tw-text-center tw-transition tw-min-h-[7rem] tw-border tw-border-gray-200 hover:tw-bg-gray-50"
+                                class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-text-center tw-rounded-xl tw-p-3 tw-border tw-border-gray-200 tw-transition hover:tw-bg-gray-50 md:tw-h-[8rem]"
                                 :class="{
                                     'tw-cursor-not-allowed tw-opacity-60 hover:tw-bg-slate-50':
                                         !!action.comingSoon,
@@ -261,50 +259,47 @@ const triggerUploadModal = () => {
                                 "
                             >
                                 <span
-                                    class="tw-flex tw-h-16 tw-w-16 tw-items-center tw-justify-center tw-rounded-3xl tw-bg-white tw-text-primary tw-shadow"
+                                    class="tw-flex tw-h-14 tw-w-14 tw-items-center tw-justify-center tw-rounded-3xl tw-bg-white tw-text-primary tw-shadow-sm"
                                 >
                                     <component
                                         :is="resolveIcon(action.icon)"
-                                        class="tw-h-8 tw-w-8"
+                                        class="tw-h-7 tw-w-7"
                                     />
                                 </span>
-                                <div
-                                    class="tw-text-sm tw-font-semibold tw-text-slate-700"
+                                <p
+                                    class="tw-text-xs md:tw-text-sm tw-font-medium tw-text-slate-700 tw-mt-1 tw-leading-tight tw-text-balance"
                                 >
-                                    <p>{{ action.label }}</p>
-                                </div>
+                                    {{ action.label }}
+                                </p>
                             </Link>
                         </div>
                     </div>
 
-                    <!-- Ganti Password & Logout  -->
+                    <!-- Ganti Password & Logout -->
                     <div class="tw-bg-white tw-shadow-sm tw-rounded-lg tw-p-6">
-                        <div class="tw-flex tw-flex-col tw-gap-2">
+                        <div class="tw-flex tw-flex-col tw-gap-1">
                             <div
-                                class="tw-flex tw-items-center tw-justify-between tw-py-3 tw-px-4 tw-border-b tw-border-gray-200 tw-cursor-pointer hover:tw-bg-gray-50"
+                                class="tw-flex tw-items-center tw-justify-between tw-py-2.5 tw-px-4 tw-border-b tw-border-gray-200 tw-cursor-pointer hover:tw-bg-gray-50"
                                 @click="router.visit(route('password.request'))"
                             >
                                 <div class="tw-flex tw-items-center tw-gap-3">
-                                    <p class="tw-font-medium tw-text-gray-800">
+                                    <p class="tw-text-sm md:tw-text-base tw-font-medium tw-text-gray-800">
                                         Ganti Password
                                     </p>
                                 </div>
-                                <i
-                                    class="van-icon van-icon-arrow tw-text-gray-400"
-                                ></i>
+                                <i class="van-icon van-icon-arrow tw-text-gray-400 tw-text-sm"></i>
                             </div>
+
                             <div
-                                class="tw-flex tw-items-center tw-justify-between tw-py-3 tw-px-4 tw-border-b tw-border-gray-200 tw-cursor-pointer hover:tw-bg-gray-50"
+                                class="tw-flex tw-items-center tw-justify-between tw-py-2.5 tw-px-4 tw-border-b tw-border-gray-200 tw-cursor-pointer hover:tw-bg-gray-50"
                                 @click="logout"
                             >
                                 <div class="tw-flex tw-items-center tw-gap-3">
-                                    <p class="tw-font-medium tw-text-gray-800">
+                                    <p class="tw-text-sm md:tw-text-base tw-font-medium tw-text-gray-800">
                                         Logout
                                     </p>
                                 </div>
-                                <i
-                                    class="van-icon van-icon-arrow tw-text-gray-400"
-                                ></i>
+                                <i class="van-icon van-icon-arrow tw-text-gray-400 tw-text-sm"></i>
                             </div>
                         </div>
                     </div>
