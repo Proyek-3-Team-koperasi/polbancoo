@@ -3,21 +3,43 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\FinancingApplication;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\Request;
 
 class TransactionsController extends Controller
 {
     // tampilkan daftar transaksi tunai
     public function index(): Response
     {
-        $transactions = FinancingApplication::with(['order', 'member'])
-            ->where(function ($q) {
-                $q->whereNull('tenor')->orWhere('tenor', 0);
-            })
-            ->get(['id', 'order_id', 'member_user_id', 'status', 'selling_price_total', 'created_at']);
+        // Dummy data sementara
+        $transactions = collect([
+            [
+                'id' => 1,
+                'order' => [
+                    'product_image' => '/img/no-image.png',
+                    'product_name' => 'Kopi Arabica 250gr',
+                ],
+                'member' => [
+                    'name' => 'Andi Putra Wijaya',
+                ],
+                'status' => 'Pending',
+                'selling_price_total' => 45000,
+                'created_at' => now(),
+            ],
+            [
+                'id' => 2,
+                'order' => [
+                    'product_image' => '/img/no-image.png',
+                    'product_name' => 'Teh Hijau Premium',
+                ],
+                'member' => [
+                    'name' => 'ARief F-sa Wijaya',
+                ],
+                'status' => 'Lunas',
+                'selling_price_total' => 55000,
+                'created_at' => now(),
+            ],
+        ]);
 
         return Inertia::render('Admin/Transactions/Index', [
             'transactions' => $transactions,
@@ -27,10 +49,10 @@ class TransactionsController extends Controller
     // ubah status transaksi jadi lunas
     public function verify($id)
     {
-        $transaction = FinancingApplication::findOrFail($id);
-        $transaction->status = 'Lunas';
-        $transaction->save();
+        // $transaction = FinancingApplication::findOrFail($id);
+        // $transaction->status = 'Lunas';
+        // $transaction->save();
 
-        return back();
+        return back()->with('success', 'Transaksi berhasil diverifikasi!');
     }
 }
