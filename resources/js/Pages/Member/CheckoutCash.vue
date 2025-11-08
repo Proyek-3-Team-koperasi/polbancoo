@@ -77,6 +77,10 @@ function handleFileChange(event) {
 function goBackToCheckout() {
     router.visit(route("member.checkout"));
 }
+
+function confirmCashPayment() {
+    router.visit(route("member.checkout.success"));
+}
 </script>
 
 <template>
@@ -257,8 +261,9 @@ function goBackToCheckout() {
                 <button
                     type="button"
                     class="tw-flex-1 tw-bg-primary tw-text-white tw-py-2 tw-rounded-md tw-font-semibold hover:tw-bg-primary-dark tw-transition md:tw-text-base md:tw-py-3"
+                    @click="confirmCashPayment"
                 >
-                    Konfirmasi
+                    Konfirmasi Pembayaran Tunai
                 </button>
             </div>
         </div>

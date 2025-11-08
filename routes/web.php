@@ -82,6 +82,7 @@ Route::prefix('member')
         Route::get('/checkout', CheckoutController::class)->name('checkout');
         Route::match(['get', 'post'], '/checkout/cash', CheckoutCashController::class)->name('checkout.cash');
         Route::match(['get', 'post'], '/checkout/credit', CheckoutCreditController::class)->name('checkout.credit');
+        Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
         Route::get('/status/{id}', [StatusController::class, 'show'])->name('status.show');
         Route::get('/products', [ProductsController::class, 'index'])->name('products');
         Route::get('/products/{product:slug}', [\App\Http\Controllers\Member\ProductsController::class, 'show'])->name('products.show');

@@ -176,6 +176,10 @@ function submitApplication() {
         icon: "success",
         duration: 3000,
     });
+
+    setTimeout(() => {
+        router.visit(route("member.checkout.success"));
+    }, 800);
 }
 
 function formatCurrency(value) {

@@ -12,4 +12,9 @@ class CheckoutController extends Controller
     {
         return Inertia::render('Member/Checkout');
     }
+
+    public function success(): Response
+    {
+        return Inertia::render('Member/CheckoutSuccess');
+    }
 }
