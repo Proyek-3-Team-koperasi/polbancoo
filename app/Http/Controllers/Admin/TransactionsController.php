@@ -8,36 +8,52 @@ use Inertia\Response;
 
 class TransactionsController extends Controller
 {
-    // tampilkan daftar transaksi tunai
     public function index(): Response
     {
-        // Dummy data sementara
         $transactions = collect([
             [
                 'id' => 1,
-                'order' => [
-                    'product_image' => '/img/no-image.png',
-                    'product_name' => 'Kopi Arabica 250gr',
-                ],
                 'member' => [
                     'name' => 'Andi Putra Wijaya',
                 ],
                 'status' => 'Pending',
-                'selling_price_total' => 45000,
-                'created_at' => now(),
+                'created_at' => '2025-11-11 14:30:00',
+                'items' => [
+                    [
+                        'name' => 'Kopi Arabica 250gr',
+                        'qty' => 2,
+                        'buy_price' => 20000,
+                        'sell_price' => 25000,
+                    ],
+                    [
+                        'name' => 'Gula Aren Premium',
+                        'qty' => 1,
+                        'buy_price' => 35000,
+                        'sell_price' => 40000,
+                    ],
+                ],
             ],
             [
                 'id' => 2,
-                'order' => [
-                    'product_image' => '/img/no-image.png',
-                    'product_name' => 'Teh Hijau Premium',
-                ],
                 'member' => [
-                    'name' => 'ARief F-sa Wijaya',
+                    'name' => 'Arief F-sa Wijaya',
                 ],
                 'status' => 'Lunas',
-                'selling_price_total' => 55000,
-                'created_at' => now(),
+                'created_at' => '2025-11-01 13:30:00',
+                'items' => [
+                    [
+                        'name' => 'Teh Hijau Premium',
+                        'qty' => 1,
+                        'buy_price' => 45000,
+                        'sell_price' => 50000,
+                    ],
+                    [
+                        'name' => 'Madu Murni 250ml',
+                        'qty' => 1,
+                        'buy_price' => 60000,
+                        'sell_price' => 65000,
+                    ],
+                ],
             ],
         ]);
 
@@ -46,7 +62,6 @@ class TransactionsController extends Controller
         ]);
     }
 
-    // ubah status transaksi jadi lunas
     public function verify($id)
     {
         // $transaction = FinancingApplication::findOrFail($id);
