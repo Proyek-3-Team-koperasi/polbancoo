@@ -19,18 +19,11 @@ const openMenu = ref(null);
 const openSubmenu = ref(false);
 
 const toggleMenu = (menu) => {
-    if (openMenu.value === menu) {
-        openMenu.value = null;
-        openSubmenu.value = false;
-    } else {
-        openMenu.value = menu;
-        if (menu !== "status") openSubmenu.value = false;
-    }
+    openMenu.value = openMenu.value === menu ? null : menu;
+    if (menu !== "status") openSubmenu.value = false;
 };
 
-const toggleSubmenu = () => {
-    openSubmenu.value = !openSubmenu.value;
-};
+const toggleSubmenu = () => (openSubmenu.value = !openSubmenu.value);
 
 onMounted(() => {
     window.addEventListener("click", (e) => {
@@ -49,7 +42,7 @@ const applyFilter = () => {
             status_filter: statusFilter.value,
             sort_price: sortDirection.value,
         },
-        { preserveState: true },
+        { preserveState: true }
     );
 };
 
@@ -67,22 +60,56 @@ const applyCustomDateFilter = () => {
             status_filter: statusFilter.value,
             sort_price: sortDirection.value,
         },
-        { preserveState: true },
+        { preserveState: true }
     );
     openMenu.value = null;
 };
 
 const toggleSort = () => {
-    if (sortDirection.value === "") sortDirection.value = "highest";
-    else if (sortDirection.value === "highest") sortDirection.value = "lowest";
-    else sortDirection.value = "";
+    sortDirection.value =
+        sortDirection.value === ""
+            ? "highest"
+            : sortDirection.value === "highest"
+            ? "lowest"
+            : "";
     applyFilter();
 };
 
-// klik card menuju detail
 const goToDetail = (id) => {
     router.visit(route("member.status.show", id));
 };
+
+const shorten = (text, max = 20) => {
+    if (!text) return "-";
+    return text.length > max ? text.substring(0, max) + "…" : text;
+};
+
+const isMobile = ref(false);
+
+onMounted(() => {
+    const check = () => {
+        isMobile.value = window.innerWidth <= 768;
+    };
+    check();
+    window.addEventListener("resize", check);
+});
+
+const getMobileName = (items) => {
+    if (!items?.length) return "-";
+    return shorten(items[0].name);
+};
+
+const getDesktopName = (items) => {
+    if (!items?.length) return "-";
+    const names = items.map((i) => i.name);
+    if (names.length <= 3) return names.join(", ");
+    return `${names[0]}, ${names[1]}, ${names[2]}, +${names.length - 3} lainnya`;
+};
+
+const getProductName = (items) =>
+    isMobile.value ? getMobileName(items) : getDesktopName(items);
+
+const getTotalProducts = (items) => items?.length || 0;
 </script>
 
 <template>
@@ -90,185 +117,76 @@ const goToDetail = (id) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2
-                class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800"
-            >
+            <h2 class="tw-text-xl tw-font-semibold tw-text-gray-800">
                 Status Pengajuan Pembiayaan
             </h2>
         </template>
 
-        <!-- Filter bar -->
-        <div class="tw-flex tw-justify-center tw-mt-6">
-            <div
-                class="tw-flex tw-items-center tw-bg-white tw-border tw-border-slate-200 tw-rounded-2xl tw-shadow-md tw-px-6 tw-py-3 tw-gap-6"
-            >
-                <!-- === FILTER BUTTONS tetap seperti milikmu === -->
-                <!-- (Bagian ini ga aku ubah sama sekali) -->
+        <!-- FILTER -->
+        <div class="tw-flex tw-justify-center tw-gap-3 tw-mt-6 tw-flex-wrap">
 
-                <!-- Tanggal Pesanan -->
-                <div class="dropdown tw-relative">
-                    <span
-                        @click.stop="toggleMenu('date')"
-                        class="tw-cursor-pointer tw-text-orange-500 tw-font-semibold tw-text-base hover:tw-text-orange-600"
-                    >
-                        Tanggal Pesanan
-                    </span>
-
-                    <div
-                        v-show="openMenu === 'date'"
-                        class="tw-absolute tw-top-full tw-left-0 tw-mt-2 tw-bg-white tw-border tw-border-orange-300 tw-rounded-xl tw-shadow-lg tw-w-56 tw-overflow-hidden tw-z-30"
-                    >
-                        <button
-                            v-for="opt in [
-                                { key: 'all', label: 'Semua tanggal' },
-                                { key: '7_days', label: '7 Hari Terakhir' },
-                                { key: '30_days', label: '30 Hari Terakhir' },
-                                {
-                                    key: 'custom',
-                                    label: 'Pilih Tanggal Sendiri',
-                                },
-                            ]"
-                            :key="opt.key"
-                            @click.stop="
-                                dateFilter = opt.key;
-                                if (opt.key !== 'custom') applyFilter();
-                            "
-                            class="tw-w-full tw-px-4 tw-py-2 tw-text-left tw-font-medium"
-                            :class="[
-                                dateFilter === opt.key
-                                    ? 'tw-bg-orange-500 tw-text-white'
-                                    : 'tw-text-orange-600 hover:tw-bg-orange-100',
-                            ]"
-                        >
-                            {{ opt.label }}
-                        </button>
-
-                        <!-- custom tanggal -->
-                        <div
-                            v-if="dateFilter === 'custom'"
-                            class="tw-p-4 tw-bg-orange-50 tw-space-y-2 tw-border-t tw-border-orange-200"
-                        >
-                            <label
-                                class="tw-block tw-text-sm tw-font-semibold tw-text-orange-700"
-                                >Tanggal Mulai</label
-                            >
-                            <input
-                                type="date"
-                                v-model="startDate"
-                                class="tw-w-full tw-rounded-lg tw-border tw-border-orange-300 tw-px-2 tw-py-1"
-                            />
-
-                            <label
-                                class="tw-block tw-text-sm tw-font-semibold tw-text-orange-700 tw-mt-2"
-                                >Tanggal Akhir</label
-                            >
-                            <input
-                                type="date"
-                                v-model="endDate"
-                                class="tw-w-full tw-rounded-lg tw-border tw-border-orange-300 tw-px-2 tw-py-1"
-                            />
-
-                            <button
-                                @click.stop="applyCustomDateFilter"
-                                class="tw-mt-3 tw-bg-orange-500 hover:tw-bg-orange-600 tw-text-white tw-font-semibold tw-px-3 tw-py-1 tw-rounded-lg tw-w-full"
-                            >
-                                Terapkan
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Garis -->
-                <div class="tw-h-6 tw-w-px tw-bg-orange-300"></div>
-
-                <!-- Status filter -->
-                <div class="dropdown tw-relative">
-                    <span
-                        @click.stop="toggleMenu('status')"
-                        class="tw-cursor-pointer tw-text-orange-500 tw-font-semibold tw-text-base hover:tw-text-orange-600"
-                    >
-                        Status
-                    </span>
-
-                    <div
-                        v-show="openMenu === 'status'"
-                        class="tw-absolute tw-top-full tw-left-0 tw-mt-2 tw-bg-white tw-border tw-border-orange-300 tw-rounded-xl tw-shadow-lg tw-min-w-[180px] tw-z-40"
-                    >
-                        <button
-                            @click.stop="
-                                statusFilter = 'Tunai';
-                                applyFilter();
-                                openMenu = null;
-                            "
-                            class="tw-w-full tw-px-4 tw-py-2 tw-text-left tw-font-medium"
-                            :class="[
-                                statusFilter === 'Tunai'
-                                    ? 'tw-bg-orange-500 tw-text-white'
-                                    : 'tw-text-orange-600 hover:tw-bg-orange-100',
-                            ]"
-                        >
-                            Tunai (Lunas)
-                        </button>
-
-                        <div class="tw-relative">
-                            <button
-                                @click.stop="toggleSubmenu"
-                                class="tw-w-full tw-px-4 tw-py-2 tw-text-left tw-font-medium tw-flex tw-justify-between tw-items-center hover:tw-bg-orange-100"
-                                :class="openSubmenu ? 'tw-bg-orange-100' : ''"
-                            >
-                                <span class="tw-text-orange-600">Cicilan</span>
-                                <span class="tw-text-orange-400">{{
-                                    openSubmenu ? "▼" : "›"
-                                }}</span>
-                            </button>
-
-                            <div
-                                v-show="openSubmenu"
-                                class="tw-absolute tw-left-[180px] tw-top-0 tw-bg-white tw-border tw-border-orange-300 tw-rounded-xl tw-shadow-lg tw-min-w-[150px] tw-z-50"
-                            >
-                                <button
-                                    v-for="opt in [
-                                        'Pending',
-                                        'Rejected',
-                                        'Active',
-                                        'Lunas',
-                                    ]"
-                                    :key="opt"
-                                    @click.stop="
-                                        statusFilter = opt;
-                                        applyFilter();
-                                        openSubmenu = false;
-                                        openMenu = null;
-                                    "
-                                    class="tw-w-full tw-px-4 tw-py-2 tw-text-left tw-font-medium"
-                                    :class="[
-                                        statusFilter === opt
-                                            ? 'tw-bg-orange-500 tw-text-white'
-                                            : 'tw-text-orange-600 hover:tw-bg-orange-100',
-                                    ]"
-                                >
-                                    {{ opt }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tw-h-6 tw-w-px tw-bg-orange-300"></div>
-
-                <!-- Sort -->
-                <span
-                    @click="toggleSort"
-                    class="tw-cursor-pointer tw-text-orange-500 tw-font-semibold tw-text-base hover:tw-text-orange-600 tw-flex tw-items-center tw-gap-1"
+            <div class="dropdown tw-relative">
+                <button
+                    @click.stop="toggleMenu('date')"
+                    class="tw-bg-white tw-text-orange-500 tw-border tw-border-orange-500 tw-rounded-lg tw-px-4 tw-py-2 tw-shadow-sm"
                 >
-                    Total Harga
-                    <span v-if="sortDirection === 'highest'">▲</span>
-                    <span v-else-if="sortDirection === 'lowest'">▼</span>
-                </span>
+                    Tanggal
+                </button>
+
+                <div
+                    v-if="openMenu === 'date'"
+                    class="tw-absolute tw-z-20 tw-bg-white tw-rounded-lg tw-shadow-lg tw-mt-2 tw-w-48 tw-p-3"
+                >
+                    <p @click="dateFilter = 'all'; applyFilter()" class="tw-py-1 tw-cursor-pointer">Semua</p>
+                    <p @click="dateFilter = '7_days'; applyFilter()" class="tw-py-1 tw-cursor-pointer">7 hari terakhir</p>
+                    <p @click="dateFilter = '30_days'; applyFilter()" class="tw-py-1 tw-cursor-pointer">30 hari terakhir</p>
+
+                    <hr class="tw-my-2" />
+
+                    <div class="tw-space-y-2">
+                        <input v-model="startDate" type="date" class="tw-border tw-rounded tw-w-full tw-px-2 tw-py-1" />
+                        <input v-model="endDate" type="date" class="tw-border tw-rounded tw-w-full tw-px-2 tw-py-1" />
+                        <button
+                            @click="applyCustomDateFilter"
+                            class="tw-w-full tw-bg-orange-500 tw-text-white tw-rounded tw-py-1 tw-font-semibold"
+                        >
+                            Terapkan
+                        </button>
+                    </div>
+                </div>
             </div>
+
+            <div class="dropdown tw-relative">
+                <button
+                    @click.stop="toggleMenu('status')"
+                    class="tw-bg-white tw-text-orange-500 tw-border tw-border-orange-500 tw-rounded-lg tw-px-4 tw-py-2 tw-shadow-sm"
+                >
+                    Status
+                </button>
+
+                <div
+                    v-if="openMenu === 'status'"
+                    class="tw-absolute tw-z-20 tw-bg-white tw-rounded-lg tw-shadow-lg tw-mt-2 tw-w-48 tw-p-3"
+                >
+                    <p @click="statusFilter = ''; applyFilter()" class="tw-py-1 tw-cursor-pointer">Semua</p>
+                    <p @click="statusFilter = 'Pending'; applyFilter()" class="tw-py-1 tw-cursor-pointer">Pending</p>
+                    <p @click="statusFilter = 'Active'; applyFilter()" class="tw-py-1 tw-cursor-pointer">Active</p>
+                    <p @click="statusFilter = 'Lunas'; applyFilter()" class="tw-py-1 tw-cursor-pointer">Lunas</p>
+                    <p @click="statusFilter = 'Rejected'; applyFilter()" class="tw-py-1 tw-cursor-pointer">Rejected</p>
+                </div>
+            </div>
+
+            <button
+                @click="toggleSort"
+                class="tw-bg-white tw-text-orange-500 tw-border tw-border-orange-500 tw-rounded-lg tw-px-4 tw-py-2 tw-shadow-sm"
+            >
+                Harga
+                <span v-if="sortDirection === 'highest'">↑</span>
+                <span v-else-if="sortDirection === 'lowest'">↓</span>
+            </button>
         </div>
 
-        <!-- LIST TRANSAKSI -->
+        <!-- LIST -->
         <div
             class="tw-p-6 tw-bg-gradient-to-r tw-from-blue-900 tw-to-orange-500 tw-rounded-2xl tw-text-white tw-shadow-xl tw-mt-8"
         >
@@ -281,51 +199,38 @@ const goToDetail = (id) => {
                     v-for="app in applications"
                     :key="app.id"
                     @click="goToDetail(app.id)"
-                    class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-flex tw-flex-row tw-items-center tw-gap-4 tw-p-4 tw-text-gray-800 hover:tw-scale-[1.01] hover:tw-shadow-lg tw-transition tw-cursor-pointer"
+                    class="tw-bg-white tw-rounded-2xl tw-shadow-md tw-flex tw-items-center tw-gap-4 tw-p-4 tw-text-gray-800 tw-cursor-pointer tw-transition hover:tw-scale-[1.01]"
                 >
                     <img
-                        :src="app.order?.product_image || '/img/no-image.png'"
-                        class="tw-w-24 tw-h-24 tw-object-cover tw-rounded-xl"
+                        :src="app.order?.items?.[0]?.image || '/img/no-image.png'"
+                        class="tw-w-20 tw-h-20 tw-object-cover tw-rounded-xl tw-flex-shrink-0"
                     />
 
-                    <div
-                        class="tw-flex-1 tw-text-left tw-flex tw-flex-col tw-gap-1"
-                    >
-                        <span
-                            class="tw-inline-block tw-border tw-border-orange-500 tw-text-orange-500 tw-bg-white tw-font-semibold tw-rounded-full tw-px-3 tw-py-1 tw-text-xs"
-                        >
+                    <div class="tw-flex-1 tw-flex tw-flex-col tw-gap-1 tw-overflow-hidden">
+                        <span class="tw-inline-block tw-border tw-border-orange-500 tw-text-orange-500 tw-rounded-full tw-px-3 tw-py-1 tw-text-xs">
                             {{ app.status }}
                         </span>
 
                         <p class="tw-text-xs tw-text-gray-500">
-                            Kode Produk: #{{ app.id }}
+                            Kode Transaksi: #{{ app.id }}
                         </p>
 
-                        <p
-                            class="tw-font-semibold tw-text-lg tw-text-blue-900 tw-leading-tight"
-                        >
-                            {{
-                                app.order?.product_name ??
-                                "Nama Produk Tidak Tersedia"
-                            }}
+                        <p class="tw-font-semibold tw-text-lg tw-text-blue-900 tw-truncate">
+                            {{ getProductName(app.order?.items) }}
                         </p>
 
-                        <p class="tw-text-orange-600 tw-font-bold tw-text-base">
-                            Rp
-                            {{
-                                Number(app.selling_price_total).toLocaleString(
-                                    "id-ID",
-                                )
-                            }}
+                        <p class="tw-text-orange-500 tw-font-bold tw-text-base">
+                            Rp {{ Number(app.selling_price_total).toLocaleString("id-ID") }}
+                        </p>
+
+                        <p class="tw-text-sm tw-text-gray-700">
+                            {{ getTotalProducts(app.order?.items) }} produk
                         </p>
                     </div>
                 </div>
             </div>
 
-            <div
-                v-else
-                class="tw-text-center tw-text-white/80 tw-mt-4 tw-font-medium"
-            >
+            <div v-else class="tw-text-center tw-text-white/80 tw-mt-4 tw-font-medium">
                 Belum ada transaksi.
             </div>
         </div>
